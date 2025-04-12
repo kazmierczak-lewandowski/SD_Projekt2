@@ -1,7 +1,13 @@
-add_library(StructuresLib INTERFACE)
-
+add_library(StructuresLib STATIC
+        Node.hpp
+        Heap.cpp
+        Heap.hpp
+        BinarySearchTree.cpp
+        BinarySearchTree.hpp
+        PriorityQueue.hpp
+)
 target_include_directories(StructuresLib
-        INTERFACE
+        PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

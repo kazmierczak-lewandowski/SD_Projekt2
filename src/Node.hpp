@@ -6,18 +6,18 @@ class Node {
 private:
   int value;
   int priority;
-  public:
-  Node(const int value, const int priority) : value(value), priority(priority) {};
+
+public:
+  Node(const int value, const int priority)
+      : value(value), priority(priority) {};
   [[nodiscard]] int getValue() const { return value; }
   [[nodiscard]] int getPriority() const { return priority; }
-  auto operator<=>(const Node& other) const {
+  auto operator<=>(const Node &other) const {
     return priority <=> other.priority;
   }
-  bool operator==(const Node& other) const {
+  bool operator==(const Node &other) const {
     return priority == other.priority;
   }
 };
 
-
-
-#endif //NODE_HPP
+#endif // NODE_HPP
