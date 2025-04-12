@@ -4,7 +4,9 @@ add_library(StructuresLib STATIC
         Heap.hpp
         BinarySearchTree.cpp
         BinarySearchTree.hpp
-        PriorityQueue.hpp
+        Collection.cpp
+        Collection.hpp
+        PriorityQueue.cpp
 )
 target_include_directories(StructuresLib
         PUBLIC
