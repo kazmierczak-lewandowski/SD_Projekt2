@@ -7,6 +7,7 @@ add_library(StructuresLib STATIC
         Collection.cpp
         Collection.hpp
         PriorityQueue.cpp
+        PriorityQueue.hpp
 )
 target_include_directories(StructuresLib
         PUBLIC
