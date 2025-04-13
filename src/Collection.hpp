@@ -9,10 +9,11 @@ public:
   virtual int peek() = 0;
   virtual void modifyKey(int value, int newPriority) = 0;
   virtual void getHeight() = 0;
+
 protected:
-  void increaseSize() { size++; }
-  void decreaseSize() { size--; }
+  void SetSize(const int newSize) { size = newSize; }
   [[nodiscard]] int getSize() const { return size; }
+
 private:
   int size = 0;
 };
