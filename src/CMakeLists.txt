@@ -1,13 +1,12 @@
 add_library(StructuresLib STATIC
-        Node.hpp
         Heap.cpp
         Heap.hpp
         BinarySearchTree.cpp
         BinarySearchTree.hpp
         Collection.cpp
         Collection.hpp
-        PriorityQueue.cpp
-        PriorityQueue.hpp
+        Utils.cpp
+        Utils.hpp
 )
 target_include_directories(StructuresLib
         PUBLIC
