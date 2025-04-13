@@ -8,7 +8,7 @@ public:
   virtual int extractMax() = 0;
   virtual int peek() = 0;
   virtual void modifyKey(int value, int newPriority) = 0;
-
+  virtual void getHeight() = 0;
 protected:
   void increaseSize() { size++; }
   void decreaseSize() { size--; }
