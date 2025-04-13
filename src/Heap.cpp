@@ -3,8 +3,10 @@ Heap::Heap() {
   elements = std::make_unique<int[]>(10);
   this->capacity = 10;
 }
-Heap::Heap(const std::span<int> arr,
-           const int capacity = static_cast<int>(std::size(arr))) {
+Heap::Heap(std::span<int> arr) {
+  this(arr, static_cast<int>(std::size(arr)));
+}
+Heap::Heap(const std::span<int> arr, const int capacity) {
   this->capacity = capacity;
   this->elements = std::make_unique<int[]>(capacity);
   setSize(static_cast<int>(std::size(arr)));

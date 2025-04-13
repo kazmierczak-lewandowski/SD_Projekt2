@@ -7,6 +7,7 @@
 class Heap final : public Collection {
 public:
   explicit Heap();
+  explicit Heap(std::span<int> arr);
   explicit Heap(std::span<int> arr, int capacity);
   ~Heap() override = default;
   void insert(int value, int priority) override;
@@ -17,7 +18,7 @@ public:
 
 private:
   std::unique_ptr<int[]> elements;
-  int capacity;
+  int capacity{};
   void heapify(int index);
   [[nodiscard]] static int left(int index);
   [[nodiscard]] static int right(int index);
