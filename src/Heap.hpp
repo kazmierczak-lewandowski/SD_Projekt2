@@ -3,19 +3,19 @@
 #include "Collection.hpp"
 
 #include <memory>
-
+#include <vector>
 class Heap final : public Collection {
 public:
   explicit Heap();
   explicit Heap(const std::span<int> arr) : Heap(arr, static_cast<int>(arr.size())) {};
   explicit Heap(std::span<int> arr, int capacity);
   ~Heap() override = default;
+  [[nodiscard]] std::vector<std::vector<int>> getLevels() const override;
   void insert(int value, int priority) override;
   int extractMax() override;
-  int peek() override;
+  [[nodiscard]] int peek() const override;
   void modifyKey(int value, int newPriority) override;
-  void getHeight() override;
-
+  [[nodiscard]] int getHeight() const override;
 private:
   std::unique_ptr<int[]> elements;
   int capacity{};
