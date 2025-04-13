@@ -1,4 +1,5 @@
 #include "Heap.hpp"
+#include <cmath>
 Heap::Heap() {
   elements = std::make_unique<int[]>(10);
   this->capacity = 10;
@@ -14,15 +15,45 @@ Heap::Heap(const std::span<int> arr, const int capacity) {
     heapify(i);
   }
 }
-int Heap::peek() {
-  return elements[0];
+std::vector<std::vector<int>> Heap::getLevels() const {
+  std::vector<std::vector<int>> levels;
+  for (int i = 1; i < getHeight(); i*=2) {
+    std::vector<int> level;
+    for (int j = 0; j < i; j++) {
+      if (i + j >= getSize()) {
+        break;
+      }
+      level.push_back(elements[i + j]);
+    }
+    levels.push_back(level);
+  }
+  return levels;
 }
-void Heap::heapify(const int index) {
+void Heap::insert(int value, int priority) {
+  // Not implemented yet
+}
+int Heap::extractMax() {
+  const int max = elements[0];
+  elements[0] = elements[getSize() - 1];
+  setSize(getSize() - 1);
+  heapify(0);
+  return max;
+}
+int Heap::peek() const { return elements[0]; }
+void Heap::modifyKey(int value, int newPriority) {
+  //Not implemented yet
+}
+int Heap::getHeight() const {
+  return static_cast<int>(std::log2(getSize())) + 1;
+}
+void Heap::heapify(const int index) { // NOLINT(*-no-recursion)
   int largest = index;
-  if (elements[index] != -1 && elements[index] < elements[left(index)]) {
+  const int leftIndex = left(index);
+  const int rightIndex = right(index);
+  if (leftIndex < getSize() && elements[index] < elements[leftIndex]) {
     largest = left(index);
   }
-  if (elements[largest] != -1 && elements[largest] < elements[right(index)]) {
+  if (rightIndex < getSize() && elements[largest] < elements[rightIndex]) {
     largest = right(index);
   }
   if (largest != index) {
