@@ -7,7 +7,7 @@
 class Heap final : public Collection {
 public:
   explicit Heap();
-  explicit Heap(std::span<int> arr);
+  explicit Heap(const std::span<int> arr) : Heap(arr, static_cast<int>(arr.size())) {};
   explicit Heap(std::span<int> arr, int capacity);
   ~Heap() override = default;
   void insert(int value, int priority) override;

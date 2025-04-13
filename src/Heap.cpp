@@ -3,9 +3,6 @@ Heap::Heap() {
   elements = std::make_unique<int[]>(10);
   this->capacity = 10;
 }
-Heap::Heap(std::span<int> arr) {
-  this(arr, static_cast<int>(std::size(arr)));
-}
 Heap::Heap(const std::span<int> arr, const int capacity) {
   this->capacity = capacity;
   this->elements = std::make_unique<int[]>(capacity);
@@ -16,6 +13,9 @@ Heap::Heap(const std::span<int> arr, const int capacity) {
   for (int i = getSize() / 2 - 1; i >= 0; --i) {
     heapify(i);
   }
+}
+int Heap::peek() {
+  return elements[0];
 }
 void Heap::heapify(const int index) {
   int largest = index;
