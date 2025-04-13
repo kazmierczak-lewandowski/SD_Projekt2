@@ -11,7 +11,7 @@ public:
   virtual void getHeight() = 0;
 
 protected:
-  void SetSize(const int newSize) { size = newSize; }
+  void setSize(const int newSize) { size = newSize; }
   [[nodiscard]] int getSize() const { return size; }
 
 private:
