@@ -1,7 +1,6 @@
 #ifndef BST_HPP
 #define BST_HPP
-#include "Collection.hpp"
 
-class BST : public Collection {};
+class BST {};
 
 #endif // BST_HPP

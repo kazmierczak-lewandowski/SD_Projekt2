@@ -9,10 +9,9 @@ public:
   virtual int peek() = 0;
   virtual void modifyKey(int value, int newPriority) = 0;
   virtual void getHeight() = 0;
-
+  [[nodiscard]] int getSize() const { return size; }
 protected:
   void setSize(const int newSize) { size = newSize; }
-  [[nodiscard]] int getSize() const { return size; }
 
 private:
   int size = 0;
