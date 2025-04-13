@@ -1,7 +1,7 @@
 #include "Heap.hpp"
-Heap::Heap(const int capacity = 10) {
-  elements = std::make_unique<int[]>(capacity);
-  this->capacity = capacity;
+Heap::Heap() {
+  elements = std::make_unique<int[]>(10);
+  this->capacity = 10;
 }
 Heap::Heap(const std::span<int> arr,
            const int capacity = static_cast<int>(std::size(arr))) {
