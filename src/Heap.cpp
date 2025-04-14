@@ -43,10 +43,19 @@ Element Heap::extractMax() {
   return max;
 }
 int Heap::findElement(const Element &element, const int index) const {
-  for (int i = index; i < getSize(); ++i) {
-    // TODO: can be optimalized to not go through all subtrees
-    if (elements[i].checkValue(element)) {
-      return i;
+  if (element == elements[index]) {
+    return index;
+  }
+  if (left(index) < getSize()) {
+    if (const int leftIndex = findElement(element, left(index));
+        leftIndex != -1) {
+      return leftIndex;
+    }
+  }
+  if (right(index) < getSize()) {
+    if (const int rightIndex = findElement(element, right(index));
+        rightIndex != -1) {
+      return rightIndex;
     }
   }
   return -1;
