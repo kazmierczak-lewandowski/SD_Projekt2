@@ -50,7 +50,7 @@ TEST(HeapTests, ConstructFromSpan) {
   EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
 }
 
-TEST(HeapTests, ModifyKey) {
+TEST(HeapTests, IncreaseKey) {
   Heap heap;
   add3ElementsForTests(heap);
 
@@ -58,7 +58,13 @@ TEST(HeapTests, ModifyKey) {
   EXPECT_EQ(heap.peek().getPriority(), 25);
   EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
 }
+TEST(HeapTests, DecreaseKey) {
+  Heap heap;
+  add3ElementsForTests(heap);
 
+  heap.modifyKey(Element{1, 10}, 5);
+  EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
+}
 TEST(HeapTests, FindElement) {
   Heap heap;
   add3ElementsForTests(heap);
@@ -73,4 +79,32 @@ TEST(HeapTests, GetHeight) {
   add3ElementsForTests(heap);
   heap.insert(Element{4, 15}, 15);
   EXPECT_EQ(heap.getHeight(), 3);
+}
+
+TEST(HeapTests, GrowTest) {
+  std::vector<Element> elements = {{1, 10}, {2, 20}, {3, 5}};
+  Heap heap(elements);
+  heap.insert(Element{4, 15}, 15);
+  EXPECT_EQ(heap.getCapacity(), 6);
+}
+
+TEST(HeapTests, GetLevels) {
+  std::vector<Element> elements = {{1, 10}, {2, 20},
+    {3, 5}, {4, 15}, {5, 25}};
+  const Heap heap(elements);
+
+  const std::vector<std::vector<Element>> levels = heap.getLevels();
+
+  ASSERT_EQ(levels.size(), 3);
+
+  EXPECT_EQ(levels[0].size(), 1);
+  EXPECT_EQ(levels[0][0], elements[4]);
+
+  EXPECT_EQ(levels[1].size(), 2);
+  EXPECT_EQ(levels[1][0], elements[1]);
+  EXPECT_EQ(levels[1][1], elements[2]);
+
+  EXPECT_EQ(levels[2].size(), 2);
+  EXPECT_EQ(levels[2][0], elements[3]);
+  EXPECT_EQ(levels[2][1], elements[0]);
 }

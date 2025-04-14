@@ -13,16 +13,26 @@ Heap::Heap(const std::span<Element> elements, const int capacity) {
 }
 std::vector<std::vector<Element>> Heap::getLevels() const {
   std::vector<std::vector<Element>> levels;
-  for (int i = 1; i < getHeight(); i *= 2) {
+  const int size = getSize();
+  if (size == 0) return levels;
+
+  int levelNumber = 0;
+  while (true) {
+    const int start = static_cast<int>(std::pow(2, levelNumber)) - 1;
+    if (start >= size) break;
+
+    int end = static_cast<int>(std::pow(2, levelNumber + 1)) - 1;
+    end = std::min(end, size);
+
     std::vector<Element> level;
-    for (int j = 0; j < i; j++) {
-      if (i + j >= getSize()) {
-        break;
-      }
-      level.push_back(elements[i + j]);
+    for (int i = start; i < end; i++) {
+      level.push_back(elements[i]);
     }
     levels.push_back(level);
+
+    levelNumber++;
   }
+
   return levels;
 }
 void Heap::insert(const Element element, int priority) {

@@ -9,6 +9,7 @@ class Heap final : public Collection {
 public:
   explicit Heap() : elements(std::make_unique<Element[]>(10)), capacity(10) {};
   Heap(std::span<Element> elements, int capacity);
+  [[nodiscard]] int getCapacity() const { return capacity; }
   [[nodiscard]] Element* getElements() const {
     return elements.get();
   }
