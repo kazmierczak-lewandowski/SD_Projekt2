@@ -8,14 +8,15 @@
 class Heap final : public Collection {
 public:
   explicit Heap();
-  explicit Heap(const std::span<Element> arr) : Heap(arr, static_cast<int>(arr.size())) {};
-  explicit Heap(std::span<Element> arr, int capacity);
+  Heap(std::span<Element> elements, int capacity);
+  explicit Heap(const std::span<Element> elements) : Heap(elements, static_cast<int>(std::size(elements))) {};
   ~Heap() override = default;
   [[nodiscard]] std::vector<std::vector<Element>> getLevels() const override;
   void insert(Element element, int priority) override;
   Element extractMax() override;
-  [[nodiscard]] int findElement(const Element &element, int index) const override;
   [[nodiscard]] Element peek() const override;
+  [[nodiscard]] int findElement(const Element &element,
+                                int index) const override;
   void modifyKey(Element element, int newPriority) override;
   [[nodiscard]] int getHeight() const override;
 private:
