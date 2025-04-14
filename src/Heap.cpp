@@ -1,9 +1,5 @@
 #include "Heap.hpp"
 #include <cmath>
-Heap::Heap() {
-  elements = std::make_unique<Element[]>(10);
-  this->capacity = 10;
-}
 Heap::Heap(const std::span<Element> elements, const int capacity) {
   this->capacity = capacity;
   this->elements = std::make_unique<Element[]>(capacity);
