@@ -10,6 +10,7 @@ public:
   [[nodiscard]] virtual std::vector<std::vector<Element>> getLevels() const = 0;
   virtual void insert(Element element, int priority) = 0;
   virtual Element extractMax() = 0;
+  [[nodiscard]] virtual int findElement(Element element) const = 0;
   [[nodiscard]] virtual Element peek() const = 0;
   virtual void modifyKey(Element element, int newPriority) = 0;
   [[nodiscard]] virtual int getHeight() const = 0;
