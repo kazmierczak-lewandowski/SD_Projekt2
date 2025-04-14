@@ -4,12 +4,12 @@ Heap::Heap() {
   elements = std::make_unique<Element[]>(10);
   this->capacity = 10;
 }
-Heap::Heap(const std::span<Element> arr, const int capacity) {
+Heap::Heap(const std::span<Element> elements, const int capacity) {
   this->capacity = capacity;
   this->elements = std::make_unique<Element[]>(capacity);
-  setSize(static_cast<int>(std::size(arr)));
+  setSize(static_cast<int>(std::size(elements)));
   for (int i = 0; i < getSize(); ++i) {
-    this->elements[i] = arr[i];
+    this->elements[i] = elements[i];
   }
   for (int i = getSize() / 2 - 1; i >= 0; --i) {
     heapifyDown(i);
