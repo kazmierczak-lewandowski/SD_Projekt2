@@ -1,15 +1,17 @@
 #ifndef COLLECTION_HPP
 #define COLLECTION_HPP
+#include "Element.hpp"
+
 #include <vector>
 
 class Collection {
 public:
   virtual ~Collection() = default;
-  [[nodiscard]] virtual std::vector<std::vector<int>> getLevels() const = 0;
-  virtual void insert(int value, int priority) = 0;
-  virtual int extractMax() = 0;
-  [[nodiscard]] virtual int peek() const = 0;
-  virtual void modifyKey(int value, int newPriority) = 0;
+  [[nodiscard]] virtual std::vector<std::vector<Element>> getLevels() const = 0;
+  virtual void insert(Element element, int priority) = 0;
+  virtual Element extractMax() = 0;
+  [[nodiscard]] virtual Element peek() const = 0;
+  virtual void modifyKey(Element element, int newPriority) = 0;
   [[nodiscard]] virtual int getHeight() const = 0;
   [[nodiscard]] int getSize() const { return size; }
 
