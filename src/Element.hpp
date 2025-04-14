@@ -13,6 +13,7 @@ public:
   bool operator==(const Element &other) const {
     return (priority == other.priority) && (value == other.value);
   }
+  void setPriority(const int newPriority) { this->priority = newPriority; }
   Element &operator=(const Element &other);
   [[nodiscard]] int getValue() const { return value; }
   [[nodiscard]] int getPriority() const { return priority; }

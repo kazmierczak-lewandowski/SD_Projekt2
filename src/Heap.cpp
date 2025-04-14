@@ -17,7 +17,7 @@ Heap::Heap(const std::span<Element> arr, const int capacity) {
 }
 std::vector<std::vector<Element>> Heap::getLevels() const {
   std::vector<std::vector<Element>> levels;
-  for (int i = 1; i < getHeight(); i*=2) {
+  for (int i = 1; i < getHeight(); i *= 2) {
     std::vector<Element> level;
     for (int j = 0; j < i; j++) {
       if (i + j >= getSize()) {
@@ -34,7 +34,6 @@ void Heap::insert(const Element element, int priority) {
   elements[getSize()] = element;
   heapifyUp(getSize());
   setSize(getSize() + 1);
-
 }
 Element Heap::extractMax() {
   const Element max = elements[0];
@@ -43,9 +42,27 @@ Element Heap::extractMax() {
   heapifyDown(0);
   return max;
 }
+int Heap::findElement(const Element &element, const int index) const {
+  for (int i = index; i < getSize(); ++i) {
+    // TODO: can be optimalized to not go through all subtrees
+    if (elements[i].checkValue(element)) {
+      return i;
+    }
+  }
+  return -1;
+}
 Element Heap::peek() const { return elements[0]; }
-void Heap::modifyKey(Element element, int newPriority) {
-  //Not implemented yet
+void Heap::modifyKey(const Element element, const int newPriority) {
+  const int index = findElement(element, 0);
+  if (index == -1) {
+    return;
+  }
+  elements[index].setPriority(newPriority);
+  if (elements[index].getPriority() > elements[parent(index)].getPriority()) {
+    heapifyUp(index);
+    return;
+  }
+  heapifyDown(index);
 }
 int Heap::getHeight() const {
   return static_cast<int>(std::log2(getSize())) + 1;
@@ -66,11 +83,11 @@ void Heap::heapifyDown(const int index) { // NOLINT(*-no-recursion)
   }
 }
 void Heap::heapifyUp(int index) {
-    while (index > 0 && elements[parent(index)] < elements[index]) {
-      std::swap(elements[index], elements[parent(index)]);
-      index = parent(index);
-    }
+  while (index > 0 && elements[parent(index)] < elements[index]) {
+    std::swap(elements[index], elements[parent(index)]);
+    index = parent(index);
   }
+}
 int Heap::left(const int index) { return 2 * index + 1; }
 int Heap::right(const int index) { return 2 * index + 2; }
 int Heap::parent(const int index) { return (index - 1) / 2; }

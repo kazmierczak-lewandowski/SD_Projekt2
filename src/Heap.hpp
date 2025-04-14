@@ -14,6 +14,7 @@ public:
   [[nodiscard]] std::vector<std::vector<Element>> getLevels() const override;
   void insert(Element element, int priority) override;
   Element extractMax() override;
+  [[nodiscard]] int findElement(const Element &element, int index) const override;
   [[nodiscard]] Element peek() const override;
   void modifyKey(Element element, int newPriority) override;
   [[nodiscard]] int getHeight() const override;

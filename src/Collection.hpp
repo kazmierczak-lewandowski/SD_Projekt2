@@ -13,8 +13,6 @@ public:
   [[nodiscard]] virtual Element peek() const = 0;
   [[nodiscard]] virtual int findElement(const Element &element, int index) const = 0;
   virtual void modifyKey(Element element, int newPriority) = 0;
-  virtual void increaseKey(int index, int newPriority) = 0;
-  virtual void decreaseKey(int index, int newPriority) = 0;
   [[nodiscard]] virtual int getHeight() const = 0;
   [[nodiscard]] int getSize() const { return size; }
 
