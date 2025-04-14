@@ -4,8 +4,6 @@
 
 
 class Utils {
-public:
-  static void swap(int *a, int *b);
 };
 
 
