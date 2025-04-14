@@ -1,45 +1,76 @@
 #include "../src/Heap.hpp"
 #include <gtest/gtest.h>
+#include <vector>
 
-TEST(HeapConstructorTests, DefaultCapacityConstructor) {
-  const Heap heap{};
-  EXPECT_EQ(heap.getSize(), 0);
+bool isHeapValid(const Element *elements, const int size) {
+  for (int i = 0; i < size; ++i) {
+    const int left = 2 * i + 1;
+    const int right = 2 * i + 2;
+    if (left < size && elements[i] < elements[left]) {
+      return false;
+    }
+    if (right < size && elements[i] < elements[right]) {
+      return false;
+    }
+  }
+  return true;
+}
+void add3ElementsForTests(Heap &heap) {
+  heap.insert(Element{1, 10}, 10);
+  heap.insert(Element{2, 20}, 20);
+  heap.insert(Element{3, 5}, 5);
+}
+TEST(HeapTests, DefaultConstructor) {
+  const Heap heap;
+  EXPECT_EQ(heap.getHeight(), 0);
 }
 
-TEST(HeapConstructorTests, ArrayConstructorWithExactCapacity) {
-  std::vector inputArray = {3, 1, 4, 1, 5, 9};
-  const auto capacity = static_cast<int>(inputArray.size());
+TEST(HeapTests, Insert) {
+  Heap heap;
+  add3ElementsForTests(heap);
 
-  Heap heap(std::span(inputArray.data(), inputArray.size()), capacity);
-
-  EXPECT_EQ(heap.getSize(), inputArray.size());
-  EXPECT_EQ(heap.peek(), 9);
+  EXPECT_EQ(heap.peek().getPriority(), 20); // Max element
+  EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
 }
 
-TEST(HeapConstructorTests, ArrayConstructorWithLargerCapacity) {
+TEST(HeapTests, ExtractMax) {
+  Heap heap;
+  add3ElementsForTests(heap);
 
-  std::vector inputArray = {3, 1, 4, 1, 5, 9};
-  constexpr int capacity = 10;
-
-  Heap heap(std::span(inputArray.data(), inputArray.size()), capacity);
-
-  EXPECT_EQ(heap.getSize(), inputArray.size());
-  EXPECT_EQ(heap.peek(), 9);
+  const Element max = heap.extractMax();
+  EXPECT_EQ(max.getPriority(), 20);
+  EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
 }
 
-TEST(HeapConstructorTests, ArrayConstructorWithoutCapacity) {
-  std::vector inputArray = {3, 1, 4, 1, 5, 9};
+TEST(HeapTests, ConstructFromSpan) {
+  std::vector<Element> elements = {{1, 10}, {2, 20}, {3, 5}};
+  const Heap heap(elements);
 
-  Heap heap(std::span(inputArray.data(), inputArray.size()));
-
-  EXPECT_EQ(heap.getSize(), inputArray.size());
-  EXPECT_EQ(heap.peek(), 9);
+  EXPECT_EQ(heap.peek().getPriority(), 20);
+  EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
 }
-TEST(HeapConstructorTests, ArrayConstructorWithCapacity) {
-  std::vector inputArray = {3, 1, 4, 1, 5, 9};
 
-  Heap heap(std::span(inputArray.data(), inputArray.size()), 100);
+TEST(HeapTests, ModifyKey) {
+  Heap heap;
+  add3ElementsForTests(heap);
 
-  EXPECT_EQ(heap.getSize(), inputArray.size());
-  EXPECT_EQ(heap.peek(), 9);
+  heap.modifyKey(Element{1, 10}, 25);
+  EXPECT_EQ(heap.peek().getPriority(), 25);
+  EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
+}
+
+TEST(HeapTests, FindElement) {
+  Heap heap;
+  add3ElementsForTests(heap);
+
+  const int index = heap.findElement(Element{3, 5}, 0);
+  EXPECT_NE(index, -1);
+  EXPECT_EQ(index, 2);
+}
+
+TEST(HeapTests, GetHeight) {
+  Heap heap;
+  add3ElementsForTests(heap);
+  heap.insert(Element{4, 15}, 15);
+  EXPECT_EQ(heap.getHeight(), 3);
 }

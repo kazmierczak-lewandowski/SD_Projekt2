@@ -9,6 +9,9 @@ class Heap final : public Collection {
 public:
   explicit Heap();
   Heap(std::span<Element> elements, int capacity);
+  [[nodiscard]] Element* getElements() const {
+    return elements.get();
+  }
   explicit Heap(const std::span<Element> elements) : Heap(elements, static_cast<int>(std::size(elements))) {};
   ~Heap() override = default;
   [[nodiscard]] std::vector<std::vector<Element>> getLevels() const override;
