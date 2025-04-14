@@ -14,7 +14,6 @@ public:
     return (priority == other.priority) && (value == other.value);
   }
   void setPriority(const int newPriority) { this->priority = newPriority; }
-  Element &operator=(const Element &other);
   [[nodiscard]] int getValue() const { return value; }
   [[nodiscard]] int getPriority() const { return priority; }
   [[nodiscard]] bool checkValue(const Element &other) const {
@@ -23,6 +22,7 @@ public:
   [[nodiscard]] bool checkValue(const int otherValue) const {
     return value == otherValue;
   }
+
 private:
   int value;
   int priority;

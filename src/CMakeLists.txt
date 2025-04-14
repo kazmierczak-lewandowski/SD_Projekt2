@@ -7,7 +7,6 @@ add_library(StructuresLib STATIC
         Collection.hpp
         Utils.cpp
         Utils.hpp
-        Element.cpp
         Element.hpp
 )
 target_include_directories(StructuresLib
