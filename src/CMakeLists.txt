@@ -22,3 +22,7 @@ target_include_directories(Structures
         PRIVATE
         StructuresLib
 )
+target_link_libraries(Structures
+        PRIVATE
+        StructuresLib
+)
