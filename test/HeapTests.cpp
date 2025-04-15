@@ -16,9 +16,9 @@ bool isHeapValid(const Element *elements, const int size) {
   return true;
 }
 void add3ElementsForTests(Heap &heap) {
-  heap.insert(Element{1, 10}, 10);
-  heap.insert(Element{2, 20}, 20);
-  heap.insert(Element{3, 5}, 5);
+  heap.insert(Element{1, 10});
+  heap.insert(Element{2, 20});
+  heap.insert(Element{3, 5});
 }
 TEST(HeapTests, DefaultConstructor) {
   const Heap heap;
@@ -77,14 +77,14 @@ TEST(HeapTests, FindElement) {
 TEST(HeapTests, GetHeight) {
   Heap heap;
   add3ElementsForTests(heap);
-  heap.insert(Element{4, 15}, 15);
+  heap.insert(Element{4, 15});
   EXPECT_EQ(heap.getHeight(), 3);
 }
 
 TEST(HeapTests, GrowTest) {
   std::vector<Element> elements = {{1, 10}, {2, 20}, {3, 5}};
   Heap heap(elements);
-  heap.insert(Element{4, 15}, 15);
+  heap.insert(Element{4, 15});
   EXPECT_EQ(heap.getCapacity(), 6);
 }
 
