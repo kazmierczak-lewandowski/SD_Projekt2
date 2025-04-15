@@ -70,10 +70,6 @@ void Heap::modifyKey(const Element element, const int newPriority) {
   }
   heapifyDown(index);
 }
-int Heap::getHeight() const {
-
-  return getSize() != 0 ? static_cast<int>(std::log2(getSize())) + 1 : 0;
-}
 void Heap::heapifyDown(const int index) { // NOLINT(*-no-recursion)
   int largest = index;
   const int leftIndex = left(index);

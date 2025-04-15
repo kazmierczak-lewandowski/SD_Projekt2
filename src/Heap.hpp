@@ -33,7 +33,6 @@ public:
   [[nodiscard]] int findElement(const Element &element,
                                 int index) const override;
   void modifyKey(Element element, int newPriority) override;
-  [[nodiscard]] int getHeight() const override;
 
 private:
   std::unique_ptr<Element[]> elements;

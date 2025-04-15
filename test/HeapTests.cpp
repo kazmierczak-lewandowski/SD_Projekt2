@@ -78,7 +78,7 @@ TEST(HeapTests, GetHeight) {
   Heap heap;
   add3ElementsForTests(heap);
   heap.insert(Element{4, 15});
-  EXPECT_EQ(heap.getHeight(), 3);
+  EXPECT_EQ(heap.getHeight(), 2);
 }
 
 TEST(HeapTests, GrowTest) {
