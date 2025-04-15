@@ -1,16 +1,5 @@
 #include "Heap.hpp"
 #include <cmath>
-Heap::Heap(const std::span<Element> elements, const int capacity) {
-  this->capacity = capacity;
-  this->elements = std::make_unique<Element[]>(capacity);
-  setSize(static_cast<int>(std::size(elements)));
-  for (int i = 0; i < getSize(); ++i) {
-    this->elements[i] = elements[i];
-  }
-  for (int i = getSize() / 2 - 1; i >= 0; --i) {
-    heapifyDown(i);
-  }
-}
 std::vector<std::vector<Element>> Heap::getLevels() const {
   std::vector<std::vector<Element>> levels;
   const int size = getSize();

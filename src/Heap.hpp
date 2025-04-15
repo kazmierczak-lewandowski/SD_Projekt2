@@ -10,7 +10,15 @@
 class Heap final : public Collection {
 public:
   explicit Heap() : elements(std::make_unique<Element[]>(10)), capacity(10) {};
-  Heap(std::span<Element> elements, int capacity);
+  Heap(const std::span<Element> elements, const int capacity) : elements(std::make_unique<Element[]>(std::size(elements))), capacity(capacity) {
+    setSize(static_cast<int>(std::size(elements)));
+    for (int i = 0; i < getSize(); ++i) {
+      this->elements[i] = elements[i];
+    }
+    for (int i = getSize() / 2 - 1; i >= 0; --i) {
+      heapifyDown(i);
+    }
+  }
   [[nodiscard]] int getCapacity() const { return capacity; }
   [[nodiscard]] Element* getElements() const {
     return elements.get();
