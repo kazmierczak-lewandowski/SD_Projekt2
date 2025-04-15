@@ -32,7 +32,7 @@ public:
   [[nodiscard]] Element peek() const override;
   [[nodiscard]] int findElement(const Element &element,
                                 int index) const override;
-  void modifyKey(Element element, int newPriority) override;
+  void modifyKey(const Element &element, int newPriority) override;
 
 private:
   std::unique_ptr<Element[]> elements;

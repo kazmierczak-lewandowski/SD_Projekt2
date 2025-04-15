@@ -14,7 +14,7 @@ public:
   [[nodiscard]] virtual Element peek() const = 0;
   [[nodiscard]] virtual int findElement(const Element &element,
                                         int index) const = 0;
-  virtual void modifyKey(Element element, int newPriority) = 0;
+  virtual void modifyKey(const Element &element, int newPriority) = 0;
   [[nodiscard]] virtual int getHeight() const {
     return getSize() != 0 ? static_cast<int>(std::log2(getSize())) : 0;
   };

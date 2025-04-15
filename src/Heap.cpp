@@ -58,7 +58,7 @@ int Heap::findElement(const Element &element, const int index) const {
   return -1;
 }
 Element Heap::peek() const { return elements[0]; }
-void Heap::modifyKey(const Element element, const int newPriority) {
+void Heap::modifyKey(const Element &element, const int newPriority) {
   const int index = findElement(element, 0);
   if (index == -1) {
     return;
