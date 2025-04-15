@@ -35,7 +35,7 @@ std::vector<std::vector<Element>> Heap::getLevels() const {
 
   return levels;
 }
-void Heap::insert(const Element element, int priority) {
+void Heap::insert(const Element element) {
   ensureCapacity();
   elements[getSize()] = element;
   heapifyUp(getSize());

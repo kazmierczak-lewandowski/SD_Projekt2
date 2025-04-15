@@ -18,7 +18,7 @@ public:
   explicit Heap(const std::span<Element> elements) : Heap(elements, static_cast<int>(std::size(elements))) {};
   ~Heap() override = default;
   [[nodiscard]] std::vector<std::vector<Element>> getLevels() const override;
-  void insert(Element element, int priority) override;
+  void insert(Element element) override;
   Element extractMax() override;
   [[nodiscard]] Element peek() const override;
   [[nodiscard]] int findElement(const Element &element,
