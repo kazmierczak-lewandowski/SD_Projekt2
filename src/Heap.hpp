@@ -5,6 +5,8 @@
 
 #include <memory>
 #include <vector>
+#include <span>
+
 class Heap final : public Collection {
 public:
   explicit Heap() : elements(std::make_unique<Element[]>(10)), capacity(10) {};
