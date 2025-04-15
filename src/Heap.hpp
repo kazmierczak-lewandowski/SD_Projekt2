@@ -4,13 +4,15 @@
 #include "Element.hpp"
 
 #include <memory>
-#include <vector>
 #include <span>
+#include <vector>
 
 class Heap final : public Collection {
 public:
   explicit Heap() : elements(std::make_unique<Element[]>(10)), capacity(10) {};
-  Heap(const std::span<Element> elements, const int capacity) : elements(std::make_unique<Element[]>(std::size(elements))), capacity(capacity) {
+  Heap(const std::span<Element> elements, const int capacity)
+      : elements(std::make_unique<Element[]>(std::size(elements))),
+        capacity(capacity) {
     setSize(static_cast<int>(std::size(elements)));
     for (int i = 0; i < getSize(); ++i) {
       this->elements[i] = elements[i];
@@ -20,10 +22,9 @@ public:
     }
   }
   [[nodiscard]] int getCapacity() const { return capacity; }
-  [[nodiscard]] Element* getElements() const {
-    return elements.get();
-  }
-  explicit Heap(const std::span<Element> elements) : Heap(elements, static_cast<int>(std::size(elements))) {};
+  [[nodiscard]] Element *getElements() const { return elements.get(); }
+  explicit Heap(const std::span<Element> elements)
+      : Heap(elements, static_cast<int>(std::size(elements))) {};
   ~Heap() override = default;
   [[nodiscard]] std::vector<std::vector<Element>> getLevels() const override;
   void insert(Element element) override;
@@ -33,6 +34,7 @@ public:
                                 int index) const override;
   void modifyKey(Element element, int newPriority) override;
   [[nodiscard]] int getHeight() const override;
+
 private:
   std::unique_ptr<Element[]> elements;
   int capacity{};

@@ -3,12 +3,14 @@
 std::vector<std::vector<Element>> Heap::getLevels() const {
   std::vector<std::vector<Element>> levels;
   const int size = getSize();
-  if (size == 0) return levels;
+  if (size == 0)
+    return levels;
 
   int levelNumber = 0;
   while (true) {
     const int start = static_cast<int>(std::pow(2, levelNumber)) - 1;
-    if (start >= size) break;
+    if (start >= size)
+      break;
 
     int end = static_cast<int>(std::pow(2, levelNumber + 1)) - 1;
     end = std::min(end, size);

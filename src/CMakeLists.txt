@@ -1,12 +1,9 @@
 add_library(StructuresLib STATIC
         Heap.cpp
         Heap.hpp
-        BinarySearchTree.cpp
-        BinarySearchTree.hpp
-        Collection.cpp
+        AVLTree.cpp
+        AVLTree.hpp
         Collection.hpp
-        Utils.cpp
-        Utils.hpp
         Element.hpp
 )
 target_include_directories(StructuresLib

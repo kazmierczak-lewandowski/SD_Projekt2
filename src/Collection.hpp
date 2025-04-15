@@ -11,7 +11,8 @@ public:
   virtual void insert(Element element) = 0;
   virtual Element extractMax() = 0;
   [[nodiscard]] virtual Element peek() const = 0;
-  [[nodiscard]] virtual int findElement(const Element &element, int index) const = 0;
+  [[nodiscard]] virtual int findElement(const Element &element,
+                                        int index) const = 0;
   virtual void modifyKey(Element element, int newPriority) = 0;
   [[nodiscard]] virtual int getHeight() const = 0;
   [[nodiscard]] int getSize() const { return size; }
