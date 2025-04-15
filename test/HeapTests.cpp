@@ -29,7 +29,7 @@ TEST(HeapTests, Insert) {
   Heap heap;
   add3ElementsForTests(heap);
 
-  EXPECT_EQ(heap.peek().getPriority(), 20); // Max element
+  EXPECT_EQ(heap.peek().getPriority(), 20);
   EXPECT_TRUE(isHeapValid(heap.getElements(), heap.getSize()));
 }
 
@@ -89,8 +89,7 @@ TEST(HeapTests, GrowTest) {
 }
 
 TEST(HeapTests, GetLevels) {
-  std::vector<Element> elements = {{1, 10}, {2, 20},
-    {3, 5}, {4, 15}, {5, 25}};
+  std::vector<Element> elements = {{1, 10}, {2, 20}, {3, 5}, {4, 15}, {5, 25}};
   const Heap heap(elements);
 
   const std::vector<std::vector<Element>> levels = heap.getLevels();

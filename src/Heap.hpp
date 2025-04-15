@@ -10,6 +10,8 @@
 class Heap final : public Collection {
 public:
   explicit Heap() : elements(std::make_unique<Element[]>(10)), capacity(10) {};
+  explicit Heap(const std::span<Element> elements)
+      : Heap(elements, static_cast<int>(std::size(elements))) {};
   Heap(const std::span<Element> elements, const int capacity)
       : elements(std::make_unique<Element[]>(std::size(elements))),
         capacity(capacity) {
@@ -21,11 +23,9 @@ public:
       heapifyDown(i);
     }
   }
+  ~Heap() override = default;
   [[nodiscard]] int getCapacity() const { return capacity; }
   [[nodiscard]] Element *getElements() const { return elements.get(); }
-  explicit Heap(const std::span<Element> elements)
-      : Heap(elements, static_cast<int>(std::size(elements))) {};
-  ~Heap() override = default;
   [[nodiscard]] std::vector<std::vector<Element>> getLevels() const override;
   void insert(Element element) override;
   Element extractMax() override;
@@ -36,7 +36,7 @@ public:
 
 private:
   std::unique_ptr<Element[]> elements;
-  int capacity{};
+  int capacity = 0;
   void heapifyDown(int index);
   void heapifyUp(int index);
   [[nodiscard]] static int left(int index);

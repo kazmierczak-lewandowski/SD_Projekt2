@@ -20,10 +20,8 @@ std::vector<std::vector<Element>> Heap::getLevels() const {
       level.push_back(elements[i]);
     }
     levels.push_back(level);
-
     levelNumber++;
   }
-
   return levels;
 }
 void Heap::insert(const Element element) {
@@ -39,7 +37,9 @@ Element Heap::extractMax() {
   heapifyDown(0);
   return max;
 }
-int Heap::findElement(const Element &element, const int index) const {
+
+int Heap::findElement(const Element &element, // NOLINT(*-no-recursion)
+                      const int index) const {
   if (element == elements[index]) {
     return index;
   }
@@ -85,10 +85,12 @@ void Heap::heapifyDown(const int index) { // NOLINT(*-no-recursion)
     heapifyDown(largest);
   }
 }
-void Heap::heapifyUp(int index) {
-  while (index > 0 && elements[parent(index)] < elements[index]) {
-    std::swap(elements[index], elements[parent(index)]);
-    index = parent(index);
+void Heap::heapifyUp(const int index) {
+  int currentIndex = index;
+  while (currentIndex > 0 &&
+         elements[parent(currentIndex)] < elements[currentIndex]) {
+    std::swap(elements[currentIndex], elements[parent(currentIndex)]);
+    currentIndex = parent(currentIndex);
   }
 }
 int Heap::left(const int index) { return 2 * index + 1; }
