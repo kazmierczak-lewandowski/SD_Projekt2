@@ -1,13 +1,10 @@
 add_library(StructuresLib STATIC
-        Node.hpp
         Heap.cpp
         Heap.hpp
-        BinarySearchTree.cpp
-        BinarySearchTree.hpp
-        Collection.cpp
+        AVLTree.cpp
+        AVLTree.hpp
         Collection.hpp
-        PriorityQueue.cpp
-        PriorityQueue.hpp
+        Element.hpp
 )
 target_include_directories(StructuresLib
         PUBLIC
@@ -18,6 +15,10 @@ add_executable(Structures
         main.cpp
 )
 target_include_directories(Structures
+        PRIVATE
+        StructuresLib
+)
+target_link_libraries(Structures
         PRIVATE
         StructuresLib
 )
