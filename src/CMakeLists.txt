@@ -1,3 +1,6 @@
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
+
 add_library(StructuresLib STATIC
         Heap.cpp
         Heap.hpp
@@ -21,4 +24,5 @@ target_include_directories(Structures
 target_link_libraries(Structures
         PRIVATE
         StructuresLib
+        ${CURSES_LIBRARIES}
 )

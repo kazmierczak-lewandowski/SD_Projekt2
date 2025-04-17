@@ -13,11 +13,13 @@ std::vector<std::vector<Element>> Heap::getLevels() const {
       break;
 
     int end = static_cast<int>(std::pow(2, levelNumber + 1)) - 1;
-    end = std::min(end, size);
-
+    int heapEnd = std::min(end, size);
     std::vector<Element> level;
-    for (int i = start; i < end; i++) {
+    for (int i = start; i < heapEnd; i++) {
       level.push_back(elements[i]);
+    }
+    for (int i = heapEnd; i < end; i++) {
+      level.emplace_back(-1,-1);
     }
     levels.push_back(level);
     levelNumber++;
