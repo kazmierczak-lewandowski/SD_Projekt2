@@ -42,30 +42,28 @@ public:
         }
         levelString += std::format("{} ", element.toString());
       }
+      if (i != 0) {
+        std::vector<size_t> semicolonPositions;
+
+        size_t pos = levelString.find(';', 0);
+        while (pos != std::string::npos) {
+          semicolonPositions.push_back(pos);
+          pos = levelString.find(';', pos + 1);
+        }
+        for (int j = 0; j < semicolonPositions.size(); j++) {
+          j % 2 == 0
+              ? mvprintw(2 * i - 1, static_cast<int>(semicolonPositions[j]) + 1,
+                         "/")
+              : mvprintw(2 * i - 1, static_cast<int>(semicolonPositions[j]) - 1,
+                         "\\");
+        }
+      }
       size_t termination = levelString.find("(-1;-1)");
       while (termination < levelString.size()) {
         levelString = levelString.replace(termination, 7, 7, ' ');
         termination = levelString.find("(-1;-1)");
       }
       mvprintw(2 * i, 0, "%s", levelString.c_str());
-      if (i == 0) {
-        continue;
-      }
-      std::vector<size_t> semicolonPositions;
-
-      size_t pos = levelString.find(';', 0);
-      while(pos != std::string::npos)
-      {
-        semicolonPositions.push_back(pos);
-        pos = levelString.find(';',pos+1);
-      }
-      for (int j = 0; j < semicolonPositions.size(); j++) {
-        j % 2 == 0
-            ? mvprintw(2 * i - 1, static_cast<int>(semicolonPositions[j])+1, "/")
-            : mvprintw(2 * i - 1,
-                      static_cast<int>(semicolonPositions[j])-1,
-                      "\\");
-      }
     }
   };
   [[nodiscard]] virtual int getHeight() const {
