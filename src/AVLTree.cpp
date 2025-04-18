@@ -7,18 +7,30 @@ void AVLTree::insert(Element element) {
     return;
   }
   auto current = root.get();
-  while (current!=nullptr) {
+  AVLNode* parent = nullptr;
+  while (current != nullptr) {
+    parent = current;
     if (newNode->element < current->element) {
       current = current->left.get();
       continue;
     }
     current = current->right.get();
   }
-  newNode.reset(current);
-  current = newNode.get();
+  newNode->parent = parent;
+  if (parent != nullptr) {
+    if (newNode->element < parent->element) {
+      parent->left = std::move(newNode);
+    } else {
+      parent->right = std::move(newNode);
+    }
+  }
   setSize(getSize()+1);
-  while (current!=nullptr) {
-    balance(current);
+  current = parent;
+  while (current != nullptr) {
+    if (std::abs(checkBalance(current)) > 1) {
+      balance(current);
+    }
+    updateHeight(current);
     current = current->parent;
   }
 }
@@ -38,7 +50,10 @@ int AVLTree::findElement(const Element& element, int index) const {
 
 }
 void AVLTree::LLRotation(AVLNode* current) {
-
+  std::unique_ptr<AVLNode> temp = std::move(current->right);
+  current->right = std::move(temp->left);
+  temp->left = std::move(current->parent->right);
+  current->parent->right = std::move(temp);
 }
 void AVLTree::RRRotation(AVLNode* current) {
   std::unique_ptr<AVLNode> temp = std::move(current->left);
@@ -47,10 +62,12 @@ void AVLTree::RRRotation(AVLNode* current) {
   current->parent->left = std::move(temp);
 }
 void AVLTree::LRRotation(AVLNode* current) {
-
+  LLRotation(current);
+  RRRotation(current);
 }
 void AVLTree::RLRotation(AVLNode* current) {
-
+  RRRotation(current);
+  LLRotation(current);
 }
 int AVLTree::checkBalance(AVLNode* current) {
   if (current->left == nullptr && current->right == nullptr) return 0;
@@ -65,3 +82,8 @@ void AVLTree::balance(AVLNode* current) {
   else if (checkBalance(current)<1 && checkBalance(current->left.get())<1) RLRotation(current);
 }
 
+void AVLTree::updateHeight(AVLNode* node) {
+  int leftHeight = node->left ? node->left->height : 0;
+  int rightHeight = node->right ? node->right->height : 0;
+  node->height = 1 + std::max(leftHeight, rightHeight);
+}

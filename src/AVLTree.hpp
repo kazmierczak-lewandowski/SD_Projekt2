@@ -34,6 +34,7 @@ private:
   void RLRotation(AVLNode *current);
   int checkBalance(AVLNode *current);
   void balance(AVLNode *current);
+  void updateHeight(AVLNode *node);
 };
 
 #endif // AVLTree_HPP
