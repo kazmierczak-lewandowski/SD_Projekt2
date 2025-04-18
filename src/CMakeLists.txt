@@ -8,6 +8,9 @@ add_library(StructuresLib STATIC
         AVLTree.hpp
         Collection.hpp
         Element.hpp
+        Collection.cpp
+        Utils.cpp
+        Utils.hpp
 )
 target_include_directories(StructuresLib
         PUBLIC
