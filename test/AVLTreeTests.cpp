@@ -43,11 +43,17 @@ void add7ElementsForTests(AVLTree &avl) {
   avl.insert(Element{2, 5});
   avl.insert(Element{2, 4});
   avl.insert(Element{2, 3});
+  avl.insert(Element{2, 17});
+  //avl.insert(Element{2, 18});
+  avl.insert(Element{3, 16});
+  avl.insert(Element{2, 15});
+  // avl.insert(Element{2, 13});
+  // avl.insert(Element{2, 14});
 }
 TEST(AVLTreeTests, insert) {
   AVLTree avl;
   add7ElementsForTests(avl);
   printTree(avl.getRoot());
   EXPECT_TRUE(isCorrect(avl.getRoot()));
-  //EXPECT_TRUE(isBalanced(avl.getRoot()));
+  EXPECT_TRUE(isBalanced(avl.getRoot()));
 }
