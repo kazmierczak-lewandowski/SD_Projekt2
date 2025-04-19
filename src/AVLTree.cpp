@@ -50,10 +50,15 @@ int AVLTree::findElement(const Element& element, int index) const {
 
 }
 void AVLTree::RRRotation(AVLNode* current) {
-  std::unique_ptr<AVLNode> temp = std::move(current->right);
-  current->right = std::move(temp->left);
-  temp->left = std::move(current->parent->right);
-  current->parent->right = std::move(temp);
+  std::unique_ptr<AVLNode> currentRight = std::move(current->right);
+  current->right = std::move(currentRight->left);
+  if (current->parent->right.get() == current) {
+    currentRight->left = std::move(current->parent->right);
+    current->parent->right = std::move(currentRight);
+  } else {
+    currentRight->left = std::move(current->parent->left);
+    current->parent->left = std::move(currentRight);
+  }
   updateHeight(current);
 }
 void AVLTree::LLRotation(AVLNode* current) {

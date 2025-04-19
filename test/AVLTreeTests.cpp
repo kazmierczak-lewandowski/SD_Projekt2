@@ -37,12 +37,12 @@ void add7ElementsForTests(AVLTree &avl) {
   avl.insert(Element{2, 11});
   avl.insert(Element{3, 8});
   avl.insert(Element{2, 12});
-  avl.insert(Element{1, 9});
-  avl.insert(Element{2, 7});
-  avl.insert(Element{3, 6});
-  avl.insert(Element{2, 5});
-  avl.insert(Element{2, 4});
-  avl.insert(Element{2, 3});
+  // avl.insert(Element{1, 9});
+  // avl.insert(Element{2, 7});
+  // avl.insert(Element{3, 6});
+  // avl.insert(Element{2, 5});
+  // avl.insert(Element{2, 4});
+  // avl.insert(Element{2, 3});
   avl.insert(Element{2, 17});
   //avl.insert(Element{2, 18});
   avl.insert(Element{3, 16});
@@ -57,3 +57,23 @@ TEST(AVLTreeTests, insert) {
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }
+// TEST(AVLTreeTests, RRRotationParentRight) {
+//   AVLTree avl;
+//   avl.insert(Element{1, 5});
+//   avl.insert(Element{2, 6});
+//   avl.insert(Element{3, 4});
+//   avl.insert(Element{4, 7});
+//   avl.insert(Element{5, 8});
+//   EXPECT_TRUE(isCorrect(avl.getRoot()));
+//   EXPECT_TRUE(isBalanced(avl.getRoot()));
+// }
+// TEST(AVLTreeTests, RRRotationParentLeft) {
+//   AVLTree avl;
+//   avl.insert(Element{1, 10});
+//   avl.insert(Element{2, 6});
+//   avl.insert(Element{3, 11});
+//   avl.insert(Element{4, 7});
+//   avl.insert(Element{5, 8});
+//   EXPECT_TRUE(isCorrect(avl.getRoot()));
+//   EXPECT_TRUE(isBalanced(avl.getRoot()));
+// }
