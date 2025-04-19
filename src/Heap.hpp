@@ -10,6 +10,8 @@
 class Heap final : public Collection {
 public:
   explicit Heap() : elements(std::make_unique<Element[]>(10)), capacity(10) {};
+  explicit Heap(const int capacity)
+      : elements(std::make_unique<Element[]>(capacity)), capacity(capacity) {};
   explicit Heap(const std::span<Element> elements)
       : Heap(elements, static_cast<int>(std::size(elements))) {};
   Heap(const std::span<Element> elements, const int capacity)

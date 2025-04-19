@@ -22,7 +22,7 @@ public:
   virtual void modifyKey(const Element &element, int newPriority) = 0;
   virtual void print() const;
   [[nodiscard]] virtual int getHeight() const {
-    return getSize() != 0 ? static_cast<int>(std::log2(getSize())) : 0;
+    return !isEmpty() ? static_cast<int>(std::log2(getSize())) : 0;
   }
   [[nodiscard]] int getSize() const { return size; }
   static void fillWithRandom(Collection &collection, const int size) {
