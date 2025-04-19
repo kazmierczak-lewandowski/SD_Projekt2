@@ -13,6 +13,8 @@ target_include_directories(StructuresLib
 
 add_executable(Structures
         main.cpp
+        Analysis.cpp
+        Analysis.hpp
 )
 target_include_directories(Structures
         PRIVATE
