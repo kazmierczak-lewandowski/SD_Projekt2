@@ -69,7 +69,7 @@ TEST(HeapTests, FindElement) {
   Heap heap;
   add3ElementsForTests(heap);
 
-  const int index = heap.findElement(Element{3, 5}, 0);
+  const int index = heap.findElement(Element{3, 5});
   EXPECT_NE(index, -1);
   EXPECT_EQ(index, 2);
 }

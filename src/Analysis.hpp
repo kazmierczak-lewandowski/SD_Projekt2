@@ -12,7 +12,7 @@ private:
     HEAP = 0, BST = 1
   };
 
-  static constexpr int ITERATIONS = 30;
+  static constexpr int ITERATIONS = 50;
   static void printSubTest(int size, int iteration);
   static Element prepareToTest(CollectionType type, int size, int iteration,
                                std::unique_ptr<Collection> &collection);

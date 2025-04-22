@@ -149,25 +149,25 @@ void Analysis::writeToFile(const std::string &filename,
 }
 void Analysis::analyze() {
   using enum CollectionType;
-  std::map<int, long> data = analyzeInsert(BST);
-  writeToFile("InsertionBST.txt", data);
-  data = analyzePeek(BST);
-  writeToFile("PeekBST.txt", data);
-  data = analyzeExtractMax(BST);
-  writeToFile("ExtractMaxBST.txt", data);
-  data = analyzeHeight(BST);
-  writeToFile("HeightBST.txt", data);
-  data = analyzeModifyKey(BST);
-  writeToFile("ModifyKeyBST.txt", data);
-  data = analyzeInsert(HEAP);
-  writeToFile("InsertionHeap.txt", data);
+  std::map<int, long> data;
+  // data = analyzeInsert(BST);
+  // writeToFile("InsertionBST.csv", data);
+  // data = analyzePeek(BST);
+  // writeToFile("PeekBST.csv", data);
+  // data = analyzeExtractMax(BST);
+  // writeToFile("ExtractMaxBST.csv", data);
+  // data = analyzeHeight(BST);
+  // writeToFile("HeightBST.csv", data);
+  // data = analyzeModifyKey(BST);
+  // writeToFile("ModifyKeyBST.csv", data);
+  // data = analyzeInsert(HEAP);
+  // writeToFile("InsertionHeap.csv", data);
   data = analyzePeek(HEAP);
-  writeToFile("PeekHeap.txt", data);
+  writeToFile("PeekHeap.csv", data);
   data = analyzeExtractMax(HEAP);
-  writeToFile("ExtractMaxHeap.txt", data);
-  data = analyzeHeight(HEAP);
-  writeToFile("HeightHeap.txt", data);
+  writeToFile("ExtractMaxHeap.csv", data);
+  // data = analyzeHeight(HEAP);
+  // writeToFile("HeightHeap.csv", data);
   data = analyzeModifyKey(HEAP);
-  writeToFile("ModifyKeyHeap.txt", data);
-
+  writeToFile("ModifyKeyHeap.csv", data);
 }
