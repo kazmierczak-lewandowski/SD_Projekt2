@@ -32,9 +32,7 @@ void AVLTree::insert(Element element) {
 
 }
 void AVLTree::modifyKey(const Element& element, int newPriority){
-  auto node = findElement(element);
-  node->element.setPriority(newPriority);
-  updateBalanceUp(node);
+
 }
 Element AVLTree::peek() const {
   auto current = root.get();
@@ -43,8 +41,7 @@ Element AVLTree::peek() const {
   }
   return current->element;
 }
-Element AVLTree::extractMax() {
-  auto current = root.get();
+Element AVLTree::extractMaxFromSubtree(AVLNode* current) {
   while (current->right != nullptr) {
     current = current->right.get();
   }
@@ -60,6 +57,12 @@ Element AVLTree::extractMax() {
   if (parent != nullptr) updateBalanceUp(parent);
   return currentElement;
 }
+
+Element AVLTree::extractMax() {
+  auto current = root.get();
+  return extractMaxFromSubtree(current);
+}
+
 std::vector<std::vector<Element>> AVLTree::getLevels() const {
   if (root == nullptr) return{};
   std::vector<std::vector<Element>> elements;
@@ -99,6 +102,47 @@ void AVLTree::getLevels(const AVLNode* current,
   }
   getLevels(current->left.get(), elements);
   getLevels(current->right.get(), elements);
+}
+void AVLTree::deleteNode(AVLNode* node) {
+  if (node == nullptr) return;
+
+  if (node->left == nullptr && node->right == nullptr) {
+    if (node == root.get()) {
+      root.reset();
+    } else {
+      if (node->parent->left.get() == node) {
+        node->parent->left.reset();
+      } else {
+        node->parent->right.reset();
+      }
+    }
+  }
+
+  else if (node->left == nullptr || node->right == nullptr) {
+    std::unique_ptr<AVLNode>& child = node->left != nullptr ? node->left : node->right;
+    if (node == root.get()) {
+      root = std::move(child);
+      root->parent = nullptr;
+    } else {
+      if (node->parent->left.get() == node) {
+        node->parent->left = std::move(child);
+      } else {
+        node->parent->right = std::move(child);
+      }
+      child->parent = node->parent;
+    }
+  }
+
+  else {
+    AVLNode* successor = node->right.get();
+    while (successor->left) {
+      successor = successor->left.get();
+    }
+    node->element = successor->element;
+    deleteNode(successor);
+    return;
+  }
+  updateBalanceUp(node->parent);
 }
 
 AVLTree::AVLNode* AVLTree::findElement(const Element &element) const {

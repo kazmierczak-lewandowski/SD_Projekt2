@@ -37,6 +37,8 @@ private:
   static void updateHeight(AVLNode *node);
   void updateBalanceUp(AVLNode *node);
   static void getLevels(const AVLNode *current, std::vector<std::vector<Element>> &elements);
+  void deleteNode(AVLNode *node);
+  Element extractMaxFromSubtree(AVLNode *node);
 };
 
 #endif // AVLTree_HPP
