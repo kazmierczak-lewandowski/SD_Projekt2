@@ -26,6 +26,7 @@ public:
   [[nodiscard]] AVLNode* getRoot() const {
     return root.get();
   }
+  void deleteNodeByElement(const Element &element);
 private:
   std::unique_ptr<AVLNode> root = nullptr;
   void LLRotation(AVLNode *current);

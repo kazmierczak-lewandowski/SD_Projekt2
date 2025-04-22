@@ -144,3 +144,26 @@ TEST(AVLTreeTests, extractMax) {
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }
+TEST(AVLTreeTests, deleting) {
+  AVLTree avl;
+  avl.insert(Element{1, 10});
+  avl.insert(Element{1, 8});
+  avl.insert(Element{1, 12});
+  avl.insert(Element{1, 9});
+  avl.insert(Element{1, 7});
+  avl.deleteNodeByElement(Element(1,8));
+  avl.deleteNodeByElement(Element(1,10));
+  EXPECT_TRUE(isCorrect(avl.getRoot()));
+  EXPECT_TRUE(isBalanced(avl.getRoot()));
+}
+TEST(AVLTreeTests, modifyKey) {
+  AVLTree avl;
+  avl.insert(Element{1, 10});
+  avl.insert(Element{1, 8});
+  avl.insert(Element{1, 12});
+  avl.insert(Element{1, 9});
+  avl.insert(Element{1, 7});
+  avl.modifyKey(Element(1,10),13);
+  EXPECT_TRUE(isCorrect(avl.getRoot()));
+  EXPECT_TRUE(isBalanced(avl.getRoot()));
+}

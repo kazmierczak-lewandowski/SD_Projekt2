@@ -31,9 +31,13 @@ void AVLTree::insert(Element element) {
   updateBalanceUp(parent);
 
 }
-void AVLTree::modifyKey(const Element& element, int newPriority){
-
+void AVLTree::modifyKey(const Element& element, int newPriority) {
+  auto node = findElement(element);
+  int value = node->element.getValue();
+  deleteNode(node);
+  insert(Element(value, newPriority));
 }
+
 Element AVLTree::peek() const {
   auto current = root.get();
   while (current->right != nullptr) {
@@ -103,6 +107,7 @@ void AVLTree::getLevels(const AVLNode* current,
   getLevels(current->left.get(), elements);
   getLevels(current->right.get(), elements);
 }
+
 void AVLTree::deleteNode(AVLNode* node) {
   if (node == nullptr) return;
 
@@ -143,6 +148,11 @@ void AVLTree::deleteNode(AVLNode* node) {
     return;
   }
   updateBalanceUp(node->parent);
+}
+
+void AVLTree::deleteNodeByElement(const Element& element) {
+  auto node = findElement(element);
+  deleteNode(node);
 }
 
 AVLTree::AVLNode* AVLTree::findElement(const Element &element) const {
