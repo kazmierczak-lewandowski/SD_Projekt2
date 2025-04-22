@@ -10,7 +10,7 @@
 void Analysis::printSubTest(const int size, const int iteration) {
   move(1, 0);
   clrtoeol();
-  printw("%s", std::format("{} test for {}\n", iteration, size).c_str());
+  mvprintw(1, 0, "%s", std::format("{} test for {}\n", iteration, size).c_str());
   refresh();
 }
 Element Analysis::prepareToTest(const CollectionType type, const int size,
@@ -149,25 +149,25 @@ void Analysis::writeToFile(const std::string &filename,
 }
 void Analysis::analyze() {
   using enum CollectionType;
-  std::map<int, long> data = analyzeInsert(HEAP);
+  std::map<int, long> data = analyzeInsert(BST);
+  writeToFile("InsertionBST.txt", data);
+  data = analyzePeek(BST);
+  writeToFile("PeekBST.txt", data);
+  data = analyzeExtractMax(BST);
+  writeToFile("ExtractMaxBST.txt", data);
+  data = analyzeHeight(BST);
+  writeToFile("HeightBST.txt", data);
+  data = analyzeModifyKey(BST);
+  writeToFile("ModifyKeyBST.txt", data);
+  data = analyzeInsert(HEAP);
   writeToFile("InsertionHeap.txt", data);
-  data = analyzeInsert(HEAP);
+  data = analyzePeek(HEAP);
   writeToFile("PeekHeap.txt", data);
-  data = analyzeInsert(HEAP);
+  data = analyzeExtractMax(HEAP);
   writeToFile("ExtractMaxHeap.txt", data);
-  data = analyzeInsert(HEAP);
+  data = analyzeHeight(HEAP);
   writeToFile("HeightHeap.txt", data);
-  data = analyzeInsert(HEAP);
+  data = analyzeModifyKey(HEAP);
   writeToFile("ModifyKeyHeap.txt", data);
 
-  data = analyzeInsert(BST);
-  writeToFile("InsertionAVL.txt", data);
-  data = analyzeInsert(BST);
-  writeToFile("PeekAVL.txt", data);
-  data = analyzeInsert(BST);
-  writeToFile("ExtractMaxAVL.txt", data);
-  data = analyzeInsert(BST);
-  writeToFile("HeightAVL.txt", data);
-  data = analyzeInsert(BST);
-  writeToFile("ModifyKeyAVL.txt", data);
 }
