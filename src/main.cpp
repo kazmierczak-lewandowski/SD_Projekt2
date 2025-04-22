@@ -1,7 +1,9 @@
 #include "AVLTree.hpp"
+#include "Analysis.hpp"
 #include "Collection.hpp"
 #include "Heap.hpp"
 
+#include <fstream>
 #include <memory>
 #include <ncurses.h>
 #include <string>
@@ -53,7 +55,7 @@ int main() {
   keypad(stdscr, true);
   curs_set(0);
   std::unique_ptr<Collection> collection = nullptr;
-  std::vector<std::string> CHOICES{"1. Heap", "2. AVLTree", "3. Wyjdz"};
+  std::vector<std::string> CHOICES{"1. Heap", "2. AVLTree", "3. Analiza", "4. Wyjdz"};
   int highlight = 0;
   menuLoop(CHOICES, highlight);
   switch (highlight) {
@@ -64,6 +66,11 @@ int main() {
   case 1: {
     collection = std::make_unique<AVLTree>();
     break;
+  }
+  case 2: {
+    Analysis::analyze();
+    endwin();
+    return 0;
   }
   default: {
     endwin();
