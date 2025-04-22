@@ -32,7 +32,7 @@ public:
   void insert(Element element) override;
   Element extractMax() override;
   [[nodiscard]] Element peek() const override;
-  [[nodiscard]] int findElement(const Element &element) const override;
+  [[nodiscard]] int findElement(const Element &element) const;
   void modifyKey(const Element &element, int newPriority) override;
 
 private:
