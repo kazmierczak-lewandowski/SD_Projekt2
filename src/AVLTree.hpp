@@ -21,7 +21,7 @@ public:
   void insert(Element element) override;
   Element extractMax() override;
   [[nodiscard]] Element peek() const override;
-  [[nodiscard]] int findElement(const Element& element, int index) const override;
+  [[nodiscard]] AVLNode* findElement(const Element &element) const;
   void modifyKey(const Element& element, int newPriority) override;
   [[nodiscard]] AVLNode* getRoot() const {
     return root.get();
@@ -35,6 +35,7 @@ private:
   static int checkBalance(const AVLNode *current);
   void balance(AVLNode *current);
   static void updateHeight(AVLNode *node);
+  void updateBalanceUp(AVLNode *node);
   static void getLevels(const AVLNode *current, std::vector<std::vector<Element>> &elements);
 };
 

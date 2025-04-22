@@ -121,3 +121,26 @@ TEST(AVLTreeTests, getLevels) {
     }
   }
 }
+
+TEST(AVLTreeTests, extractMax) {
+  AVLTree avl;
+  avl.insert(Element{1, 3});
+  avl.insert(Element{1, 2});
+  avl.insert(Element{1, 1});
+  avl.insert(Element{1, 1});
+  avl.insert(Element{1, 1});
+  avl.insert(Element{1, 4});
+  avl.insert(Element{1, 5});
+  avl.insert(Element{1, 6});
+  avl.insert(Element{1, 7});
+  avl.insert(Element{1, 8});
+  // avl.insert(Element{1, 4});
+  // avl.insert(Element{1, 5});
+  // avl.insert(Element{1, 6});
+  avl.extractMax();
+  avl.extractMax();
+  avl.extractMax();
+  avl.extractMax();
+  EXPECT_TRUE(isCorrect(avl.getRoot()));
+  EXPECT_TRUE(isBalanced(avl.getRoot()));
+}

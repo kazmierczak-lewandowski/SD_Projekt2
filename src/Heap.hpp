@@ -31,7 +31,7 @@ public:
   Element extractMax() override;
   [[nodiscard]] Element peek() const override;
   [[nodiscard]] int findElement(const Element &element,
-                                int index) const override;
+                                int index) const;
   void modifyKey(const Element &element, int newPriority) override;
 
 private:
