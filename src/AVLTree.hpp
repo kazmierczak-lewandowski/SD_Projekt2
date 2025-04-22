@@ -32,9 +32,10 @@ private:
   void RRRotation(AVLNode *current);
   void LRRotation(AVLNode *current);
   void RLRotation(AVLNode *current);
-  int checkBalance(AVLNode *current);
+  static int checkBalance(const AVLNode *current);
   void balance(AVLNode *current);
-  void updateHeight(AVLNode *node);
+  static void updateHeight(AVLNode *node);
+  static void getLevels(const AVLNode *current, std::vector<std::vector<Element>> &elements);
 };
 
 #endif // AVLTree_HPP

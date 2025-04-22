@@ -40,14 +40,62 @@ void AVLTree::modifyKey(const Element& element, int newPriority){
 
 }
 Element AVLTree::peek() const {
-
+  auto current = root.get();
+  while (current->right != nullptr) {
+    current = current->right.get();
+  }
+  return current->element;
 }
 Element AVLTree::extractMax() {
-
+  auto current = root.get();
+  while (current->right != nullptr) {
+    current = current->right.get();
+  }
+  const Element currentElement = current->element;
+  if (current->left) current->left->parent = current->parent;
+  current->parent->right = std::move(current->left);
+  return currentElement;
 }
 std::vector<std::vector<Element>> AVLTree::getLevels() const {
-
+  if (root == nullptr) return{};
+  std::vector<std::vector<Element>> elements;
+  elements.emplace_back();
+  elements[0].push_back(root->element);
+  getLevels(root.get(), elements);
+  elements.pop_back();
+  for (int i = 0; i<elements[elements.size()-2].size();i++) {
+    if (elements[elements.size()-2][i] == Element(-1, -1)) {
+      elements[elements.size()-1].insert(elements[elements.size()-1].begin() + 2 * i, Element(-1, -1));
+      elements[elements.size()-1].insert(elements[elements.size()-1].begin() + 2 * i + 1, Element(-1, -1));
+    }
+  }
+  return elements;
 }
+void AVLTree::getLevels(const AVLNode* current, std::vector<std::vector<Element>> &elements) {
+  if (current == nullptr) return;
+  int height = 0;
+  auto temp = current->parent;
+  while (temp != nullptr) {
+    height++;
+    temp = temp->parent;
+  }
+  if (elements.size() <= height + 1) {
+    elements.emplace_back();
+  }
+  if (current->left == nullptr) {
+    elements[height + 1].emplace_back(-1, -1);
+  } else {
+    elements[height + 1].push_back(current->left->element);
+  }
+  if (current->right == nullptr) {
+    elements[height + 1].emplace_back(-1, -1);
+  } else {
+    elements[height + 1].push_back(current->right->element);
+  }
+  getLevels(current->left.get(), elements);
+  getLevels(current->right.get(), elements);
+}
+
 int AVLTree::findElement(const Element& element, int index) const {
 
 }
@@ -97,9 +145,9 @@ void AVLTree::RLRotation(AVLNode* current) {
   LLRotation(current->right.get());
   RRRotation(current);
 }
-int AVLTree::checkBalance(AVLNode* current) {
-  int leftHeight = current->left ? current->left->height : -1;
-  int rightHeight = current->right ? current->right->height : -1;
+int AVLTree::checkBalance(const AVLNode* current) {
+  const int leftHeight = current->left ? current->left->height : -1;
+  const int rightHeight = current->right ? current->right->height : -1;
   return leftHeight - rightHeight;
 }
 void AVLTree::balance(AVLNode* node) {
@@ -126,7 +174,7 @@ void AVLTree::balance(AVLNode* node) {
 }
 
 void AVLTree::updateHeight(AVLNode* node) {
-  int leftHeight = node->left ? node->left->height : -1;
-  int rightHeight = node->right ? node->right->height : -1;
+  const int leftHeight = node->left ? node->left->height : -1;
+  const int rightHeight = node->right ? node->right->height : -1;
   node->height = 1 + std::max(leftHeight, rightHeight);
 }

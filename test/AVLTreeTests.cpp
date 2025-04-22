@@ -94,3 +94,30 @@ TEST(AVLTreeTests, LLRotationParentLeft) {
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }
+TEST(AVLTreeTests, getLevels) {
+  AVLTree avl;
+  avl.insert(Element{1, 10});
+  avl.insert(Element{1, 8});
+  avl.insert(Element{1, 11});
+  avl.insert(Element{1, 5});
+  avl.insert(Element{1, 9});
+  avl.insert(Element{1, 12});
+  avl.insert(Element{1, 6});
+
+  const auto levels = avl.getLevels();
+
+  const std::vector<std::vector<Element>> expectedLevels = {
+    {{1,10}},
+    {{1,8}, {1,11}},
+    {{1,5}, {1,9}, {-1,-1}, {1,12}},
+    {{-1,-1}, {1,6}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}}
+  };
+
+  EXPECT_EQ(levels.size(), expectedLevels.size());
+  for (size_t i = 0; i < levels.size(); ++i) {
+    EXPECT_EQ(levels[i].size(), expectedLevels[i].size());
+    for (size_t j = 0; j < levels[i].size(); ++j) {
+      EXPECT_EQ(levels[i][j], expectedLevels[i][j]);
+    }
+  }
+}
