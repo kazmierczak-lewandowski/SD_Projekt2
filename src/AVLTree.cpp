@@ -1,4 +1,6 @@
 #include "AVLTree.hpp"
+
+#include <iostream>
 void AVLTree::insert(Element element) {
   auto newNode = std::make_unique<AVLNode>(element);
   if (getSize() == 0) {
@@ -52,20 +54,39 @@ int AVLTree::findElement(const Element& element, int index) const {
 void AVLTree::RRRotation(AVLNode* current) {
   std::unique_ptr<AVLNode> currentRight = std::move(current->right);
   current->right = std::move(currentRight->left);
-  if (current->parent->right.get() == current) {
-    currentRight->left = std::move(current->parent->right);
-    current->parent->right = std::move(currentRight);
+  if (current->right) current->right->parent = current;
+  currentRight->parent = current->parent;
+  if (current->parent) {
+    if (current->parent->right.get() == current) {
+      currentRight->left = std::move(current->parent->right);
+      current->parent->right = std::move(currentRight);
+    } else {
+      currentRight->left = std::move(current->parent->left);
+      current->parent->left = std::move(currentRight);
+    }
   } else {
-    currentRight->left = std::move(current->parent->left);
-    current->parent->left = std::move(currentRight);
+    currentRight->left = std::move(root);
+    root = std::move(currentRight);
   }
   updateHeight(current);
 }
 void AVLTree::LLRotation(AVLNode* current) {
-  std::unique_ptr<AVLNode> temp = std::move(current->left);
-  current->left = std::move(temp->right);
-  temp->right = std::move(current->parent->left);
-  current->parent->left = std::move(temp);
+  std::unique_ptr<AVLNode> currentLeft = std::move(current->left);
+  current->left = std::move(currentLeft->right);
+  if (current->left) current->left->parent = current;
+  currentLeft->parent = current->parent;
+  if (current->parent) {
+    if (current->parent->left.get() == current) {
+      currentLeft->right = std::move(current->parent->left);
+      current->parent->left = std::move(currentLeft);
+    } else {
+      currentLeft->right = std::move(current->parent->right);
+      current->parent->right = std::move(currentLeft);
+    }
+  } else {
+    currentLeft->right = std::move(root);
+    root = std::move(currentLeft);
+  }
   updateHeight(current);
 }
 void AVLTree::LRRotation(AVLNode* current) {
