@@ -48,3 +48,21 @@ void Collection::print() const {
     mvprintw(2 * i, 0, "%s", levelString.c_str());
   }
 }
+void Collection::fillWithRandom(Collection &collection, const int size) {
+  for (int i = 0; i < size; i++) {
+    collection.insert(Element(Utils::rng(0, size), Utils::rng(0, 5 * size)));
+  }
+}
+void Collection::fillFromFile(Collection &collection,
+                              const std::string &filename) {
+  std::ifstream ifs(filename);
+  if (!ifs.is_open()) {
+    std::cerr << "Failed to open file " << filename << std::endl;
+  }
+  int number;
+  int priority;
+  while (ifs >> number && ifs >> priority) {
+    collection.insert(Element(number, priority));
+  }
+  ifs.close();
+}

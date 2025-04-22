@@ -25,24 +25,8 @@ public:
     return !isEmpty() ? static_cast<int>(std::log2(getSize())) : 0;
   }
   [[nodiscard]] int getSize() const { return size; }
-  static void fillWithRandom(Collection &collection, const int size) {
-    for (int i = 0; i < size; i++) {
-      collection.insert(Element(Utils::rng(0, size), Utils::rng(0, 5 * size)));
-    }
-  }
-  static void fillFromFile(Collection &collection,
-                           const std::string &filename) {
-    std::ifstream ifs(filename);
-    if (!ifs.is_open()) {
-      std::cerr << "Failed to open file " << filename << std::endl;
-    }
-    int number;
-    int priority;
-    while (ifs >> number && ifs >> priority) {
-      collection.insert(Element(number, priority));
-    }
-    ifs.close();
-  }
+  static void fillWithRandom(Collection &collection, const int size);
+  static void fillFromFile(Collection &collection, const std::string &filename);
 
   [[nodiscard]] bool isEmpty() const { return size == 0; }
 
