@@ -66,3 +66,15 @@ void Collection::fillFromFile(Collection &collection,
   }
   ifs.close();
 }
+Element Collection::getRandomElement() const {
+  auto levels = getLevels();
+  std::vector<Element> allElements;
+  for (const auto &level : levels) {
+    for (Element element : level) {
+      if (element != Element(-1, -1)) {
+        allElements.push_back(element);
+      }
+    }
+  }
+  return allElements[Utils::rng(0, static_cast<int>(allElements.size()) - 1)];
+}

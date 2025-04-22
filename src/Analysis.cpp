@@ -3,24 +3,144 @@
 #include "AVLTree.hpp"
 #include "Heap.hpp"
 
+#include <chrono>
 #include <fstream>
-#include <iostream>
 #include <ncurses.h>
+
+void Analysis::printSubTest(const int size, const int iteration) {
+  move(1, 0);
+  clrtoeol();
+  printw("%s", std::format("{} test for {}\n", iteration, size).c_str());
+  refresh();
+}
+Element Analysis::prepareToTest(const CollectionType type, const int size,
+                                const int iteration,
+                                std::unique_ptr<Collection> &collection) {
+  printSubTest(size, iteration);
+  type == CollectionType::HEAP ? collection = std::make_unique<Heap>(size + 1)
+                               : collection = std::make_unique<AVLTree>();
+  Collection::fillFromFile(
+      *collection, "/home/kazik/CLionProjects/SD_Projekt2/src/numbers.txt");
+  return {Utils::rng(0, 5'000'000), Utils::rng(0, 25'000'000)};
+}
 std::map<int, long> Analysis::analyzeInsert(const CollectionType type) {
   clear();
-  const auto string = std::format("Analyzing Insertion of {}",
-                            type == CollectionType::HEAP ? "Heap" : "BST");
-  mvprintw(0,0, "%s", string.c_str());
-  for (int i = 100000; i <= 5000000; i+=100000) {
-
+  std::map<int, long> result;
+  const auto string =
+      std::format("Analyzing Insertion of {}",
+                  type == CollectionType::HEAP ? "Heap" : "BST");
+  mvprintw(0, 0, "%s", string.c_str());
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+    long average = 0;
+    for (int j = 0; j < ITERATIONS; j++) {
+      std::unique_ptr<Collection> collection;
+      const auto element = prepareToTest(type, i, j, collection);
+      const auto start = std::chrono::high_resolution_clock::now();
+      collection->insert(element);
+      const auto end = std::chrono::high_resolution_clock::now();
+      average +=
+          std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+              .count();
+    }
+    result.insert(std::pair(i, average / ITERATIONS));
   }
+  return result;
+}
+std::map<int, long> Analysis::analyzePeek(const CollectionType type) {
+  clear();
+  std::map<int, long> result;
+  const auto string = std::format(
+      "Analyzing peek of {}", type == CollectionType::HEAP ? "Heap" : "BST");
+  mvprintw(0, 0, "%s", string.c_str());
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+    long average = 0;
+    for (int j = 0; j < ITERATIONS; j++) {
+      std::unique_ptr<Collection> collection;
+      prepareToTest(type, i, j, collection);
+      const auto start = std::chrono::high_resolution_clock::now();
+      collection->peek();
+      const auto end = std::chrono::high_resolution_clock::now();
+      average +=
+          std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+              .count();
+    }
+    result.insert(std::pair(i, average / ITERATIONS));
+  }
+  return result;
+}
+std::map<int, long> Analysis::analyzeExtractMax(const CollectionType type) {
+  clear();
+  std::map<int, long> result;
+  const auto string = std::format(
+      "Analyzing extract max of {}", type == CollectionType::HEAP ? "Heap" : "BST");
+  mvprintw(0, 0, "%s", string.c_str());
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+    long average = 0;
+    for (int j = 0; j < ITERATIONS; j++) {
+      std::unique_ptr<Collection> collection;
+      prepareToTest(type, i, j, collection);
+      const auto start = std::chrono::high_resolution_clock::now();
+      collection->extractMax();
+      const auto end = std::chrono::high_resolution_clock::now();
+      average +=
+          std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+              .count();
+    }
+    result.insert(std::pair(i, average / ITERATIONS));
+  }
+  return result;
+}
+std::map<int, long> Analysis::analyzeHeight(CollectionType type) {
+  clear();
+  std::map<int, long> result;
+  const auto string =
+      std::format("Analyzing getting height of {}",
+                  type == CollectionType::HEAP ? "Heap" : "BST");
+  mvprintw(0, 0, "%s", string.c_str());
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+    long average = 0;
+    for (int j = 0; j < ITERATIONS; j++) {
+      std::unique_ptr<Collection> collection;
+      prepareToTest(type, i, j, collection);
+      const auto start = std::chrono::high_resolution_clock::now();
+      collection->getHeight();
+      const auto end = std::chrono::high_resolution_clock::now();
+      average +=
+          std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+              .count();
+    }
+    result.insert(std::pair(i, average / ITERATIONS));
+  }
+  return result;
+}
+std::map<int, long> Analysis::analyzeModifyKey(CollectionType type) {
+  clear();
+  std::map<int, long> result;
+  const auto string =
+      std::format("Analyzing modifying key of {}",
+                  type == CollectionType::HEAP ? "Heap" : "BST");
+  mvprintw(0, 0, "%s", string.c_str());
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+    long average = 0;
+    for (int j = 0; j < ITERATIONS; j++) {
+      std::unique_ptr<Collection> collection;
+      prepareToTest(type, i, j, collection);
+      Element element = collection.get()->getRandomElement();
+      const auto start = std::chrono::high_resolution_clock::now();
+      collection->modifyKey(element, Utils::rng(0, 25'000'000));
+      const auto end = std::chrono::high_resolution_clock::now();
+      average +=
+          std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+              .count();
+    }
+    result.insert(std::pair(i, average / ITERATIONS));
+  }
+  return result;
 }
 void Analysis::writeToFile(const std::string &filename,
                            const std::map<int, long> &data) {
-  std::ofstream ofs("../results/" + filename);
-  if (!ofs.is_open()) {
-    std::cerr << "Failed to open file " << filename << std::endl;
-  }
+  std::ofstream ofs("/home/kazik/CLionProjects/SD_Projekt2/results/" +
+                    filename);
   ofs << "size;time" << std::endl;
   for (const auto &[key, value] : data) {
     ofs << key << ";" << value << std::endl;
@@ -28,8 +148,26 @@ void Analysis::writeToFile(const std::string &filename,
   ofs.close();
 }
 void Analysis::analyze() {
-  std::map<int, long> data = analyzeInsert(CollectionType::HEAP);
-  writeToFile("InsertionHeap", data);
-  data = analyzeInsert(CollectionType::BST);
-  writeToFile("InsertionBST", data);
+  using enum CollectionType;
+  std::map<int, long> data = analyzeInsert(HEAP);
+  writeToFile("InsertionHeap.txt", data);
+  data = analyzeInsert(HEAP);
+  writeToFile("PeekHeap.txt", data);
+  data = analyzeInsert(HEAP);
+  writeToFile("ExtractMaxHeap.txt", data);
+  data = analyzeInsert(HEAP);
+  writeToFile("HeightHeap.txt", data);
+  data = analyzeInsert(HEAP);
+  writeToFile("ModifyKeyHeap.txt", data);
+
+  data = analyzeInsert(BST);
+  writeToFile("InsertionAVL.txt", data);
+  data = analyzeInsert(BST);
+  writeToFile("PeekAVL.txt", data);
+  data = analyzeInsert(BST);
+  writeToFile("ExtractMaxAVL.txt", data);
+  data = analyzeInsert(BST);
+  writeToFile("HeightAVL.txt", data);
+  data = analyzeInsert(BST);
+  writeToFile("ModifyKeyAVL.txt", data);
 }

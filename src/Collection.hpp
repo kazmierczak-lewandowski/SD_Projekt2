@@ -27,7 +27,7 @@ public:
   [[nodiscard]] int getSize() const { return size; }
   static void fillWithRandom(Collection &collection, const int size);
   static void fillFromFile(Collection &collection, const std::string &filename);
-
+  Element getRandomElement() const;
   [[nodiscard]] bool isEmpty() const { return size == 0; }
 
 protected:

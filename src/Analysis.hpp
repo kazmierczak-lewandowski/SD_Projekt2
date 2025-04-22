@@ -3,6 +3,7 @@
 #include "Collection.hpp"
 
 #include <map>
+#include <memory>
 
 class Analysis {
 
@@ -12,6 +13,9 @@ private:
   };
 
   static constexpr int ITERATIONS = 30;
+  static void printSubTest(int size, int iteration);
+  static Element prepareToTest(CollectionType type, int size, int iteration,
+                               std::unique_ptr<Collection> &collection);
   static std::map<int, long> analyzeInsert(CollectionType type);
   static std::map<int, long> analyzePeek(CollectionType type);
   static std::map<int, long> analyzeExtractMax(CollectionType type);
