@@ -125,7 +125,7 @@ std::map<int, long> Analysis::analyzeModifyKey(CollectionType type) {
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
       prepareToTest(type, i, j, collection);
-      Element element = collection.get()->getRandomElement();
+      Element element = collection->getRandomElement();
       const auto start = std::chrono::high_resolution_clock::now();
       collection->modifyKey(element, Utils::rng(0, 25'000'000));
       const auto end = std::chrono::high_resolution_clock::now();
@@ -149,8 +149,7 @@ void Analysis::writeToFile(const std::string &filename,
 }
 void Analysis::analyze() {
   using enum CollectionType;
-  std::map<int, long> data;
-  data = analyzeInsert(BST);
+  std::map<int, long> data = analyzeInsert(BST);
   writeToFile("InsertionBST.csv", data);
   data = analyzePeek(BST);
   writeToFile("PeekBST.csv", data);
