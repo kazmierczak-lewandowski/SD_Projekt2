@@ -6,7 +6,7 @@ void AVLTree::insert(Element element) {
   auto newNode = std::make_unique<AVLNode>(element);
   if (getSize() == 0) {
     root = std::move(newNode);
-    setSize(getSize()+1);
+    setSize(getSize() + 1);
     return;
   }
   auto current = root.get();
@@ -27,9 +27,8 @@ void AVLTree::insert(Element element) {
       parent->right = std::move(newNode);
     }
   }
-  setSize(getSize()+1);
+  setSize(getSize() + 1);
   updateBalanceUp(parent);
-
 }
 void AVLTree::modifyKey(const Element& element, int newPriority) {
   auto node = findElement(element);
@@ -68,21 +67,23 @@ Element AVLTree::extractMax() {
 }
 
 std::vector<std::vector<Element>> AVLTree::getLevels() const {
-  if (root == nullptr) return{};
+  if (root == nullptr) return {};
   std::vector<std::vector<Element>> elements;
   elements.emplace_back();
   elements[0].push_back(root->element);
   getLevels(root.get(), elements);
   elements.pop_back();
-  for (int i = 0; i<elements[elements.size()-2].size();i++) {
-    if (elements[elements.size()-2][i] == Element(-1, -1)) {
-      elements[elements.size()-1].insert(elements[elements.size()-1].begin() + 2 * i, Element(-1, -1));
-      elements[elements.size()-1].insert(elements[elements.size()-1].begin() + 2 * i + 1, Element(-1, -1));
+  for (int i = 0; i < elements[elements.size() - 2].size(); i++) {
+    if (elements[elements.size() - 2][i] == Element(-1, -1)) {
+      elements[elements.size() - 1].insert(
+          elements[elements.size() - 1].begin() + 2 * i, Element(-1, -1));
+      elements[elements.size() - 1].insert(
+          elements[elements.size() - 1].begin() + 2 * i + 1, Element(-1, -1));
     }
   }
   return elements;
 }
-void AVLTree::getLevels(const AVLNode* current,
+void AVLTree::getLevels(const AVLNode* current, // NOLINT(*-no-recursion)
                         std::vector<std::vector<Element>>& elements) {
   if (current == nullptr) return;
   int height = 0;
@@ -108,7 +109,7 @@ void AVLTree::getLevels(const AVLNode* current,
   getLevels(current->right.get(), elements);
 }
 
-void AVLTree::deleteNode(AVLNode* node) {
+void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return;
 
   if (node->left == nullptr && node->right == nullptr) {
@@ -124,7 +125,8 @@ void AVLTree::deleteNode(AVLNode* node) {
   }
 
   else if (node->left == nullptr || node->right == nullptr) {
-    std::unique_ptr<AVLNode>& child = node->left != nullptr ? node->left : node->right;
+    std::unique_ptr<AVLNode>& child =
+        node->left != nullptr ? node->left : node->right;
     if (node == root.get()) {
       root = std::move(child);
       root->parent = nullptr;
@@ -155,7 +157,7 @@ void AVLTree::deleteNodeByElement(const Element& element) {
   deleteNode(node);
 }
 
-AVLTree::AVLNode* AVLTree::findElement(const Element &element) const {
+AVLTree::AVLNode* AVLTree::findElement(const Element& element) const {
   AVLNode* current = root.get();
   while (current->element != element) {
     if (element < current->element) {
@@ -230,8 +232,7 @@ void AVLTree::balance(AVLNode* node) {
     } else {
       LRRotation(node);
     }
-  }
-  else if (balance_factor < -1) {
+  } else if (balance_factor < -1) {
     if (checkBalance(node->right.get()) <= 0) {
       RRRotation(node);
     } else {

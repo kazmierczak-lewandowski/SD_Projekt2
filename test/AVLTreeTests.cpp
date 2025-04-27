@@ -3,14 +3,14 @@
 #include <algorithm>
 #include <cmath>
 
-bool isCorrect(AVLTree::AVLNode *node) {
+bool isCorrect(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
   if (node->left && node->left->element > node->element) return false;
   if (node->right && node->right->element < node->element) return false;
   return isCorrect(node->left.get()) && isCorrect(node->right.get());
 }
 
-bool isBalanced(AVLTree::AVLNode *node) {
+bool isBalanced(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
 
   int leftHeight = node->left ? node->left->height : -1;
