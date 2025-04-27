@@ -30,7 +30,7 @@ std::map<int, long> Analysis::analyzeInsert(const CollectionType type) {
       std::format("Analyzing Insertion of {}",
                   type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+  for (int i = 100'000; i <= 10'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -52,7 +52,7 @@ std::map<int, long> Analysis::analyzePeek(const CollectionType type) {
   const auto string = std::format(
       "Analyzing peek of {}", type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+  for (int i = 100'000; i <= 10'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -74,7 +74,7 @@ std::map<int, long> Analysis::analyzeExtractMax(const CollectionType type) {
   const auto string = std::format(
       "Analyzing extract max of {}", type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+  for (int i = 100'000; i <= 10'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -90,14 +90,14 @@ std::map<int, long> Analysis::analyzeExtractMax(const CollectionType type) {
   }
   return result;
 }
-std::map<int, long> Analysis::analyzeHeight(CollectionType type) {
+std::map<int, long> Analysis::analyzeHeight(const CollectionType type) {
   clear();
   std::map<int, long> result;
   const auto string =
       std::format("Analyzing getting height of {}",
                   type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+  for (int i = 100'000; i <= 10'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -113,14 +113,14 @@ std::map<int, long> Analysis::analyzeHeight(CollectionType type) {
   }
   return result;
 }
-std::map<int, long> Analysis::analyzeModifyKey(CollectionType type) {
+std::map<int, long> Analysis::analyzeModifyKey(const CollectionType type) {
   clear();
   std::map<int, long> result;
   const auto string =
       std::format("Analyzing modifying key of {}",
                   type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
+  for (int i = 100'000; i <= 10'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -149,7 +149,8 @@ void Analysis::writeToFile(const std::string &filename,
 }
 void Analysis::analyze() {
   using enum CollectionType;
-  std::map<int, long> data = analyzeInsert(BST);
+  std::map<int, long> data;
+  data = analyzeInsert(BST);
   writeToFile("InsertionBST.csv", data);
   data = analyzePeek(BST);
   writeToFile("PeekBST.csv", data);
