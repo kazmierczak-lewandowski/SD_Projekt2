@@ -132,11 +132,12 @@ void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
       root->parent = nullptr;
     } else {
       if (node->parent->left.get() == node) {
+        child->parent = node->parent;
         node->parent->left = std::move(child);
       } else {
+        child->parent = node->parent;
         node->parent->right = std::move(child);
       }
-      child->parent = node->parent;
     }
   }
 
