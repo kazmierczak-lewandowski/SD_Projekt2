@@ -153,7 +153,7 @@ void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
 }
 
 void AVLTree::deleteNodeByElement(const Element& element) {
-  auto node = findElement(element);
+  const auto node = findElement(element);
   deleteNode(node);
 }
 
