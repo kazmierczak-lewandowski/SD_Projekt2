@@ -14,8 +14,8 @@ bool isCorrect(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
 bool isBalanced(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
 
-  int leftHeight = node->left ? node->left->height : -1;
-  int rightHeight = node->right ? node->right->height : -1;
+  const int leftHeight = node->left ? node->left->height : -1;
+  const int rightHeight = node->right ? node->right->height : -1;
 
   if (std::abs(leftHeight - rightHeight) > 1) return false;
 
