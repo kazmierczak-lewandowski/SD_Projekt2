@@ -6,8 +6,11 @@
 class Element {
 public:
   Element(const int value, const int priority)
-      : value(value), priority(priority) {}
-  Element() : value(-1), priority(-1) {}
+     : value(value), priority(priority) {}
+ friend std::ostream& operator<<(std::ostream& os, const Element& obj) {
+   return os << "value: " << obj.value << " priority: " << obj.priority;
+ }
+ Element() : value(-1), priority(-1) {}
   auto operator<=>(const Element &other) const {
     return priority <=> other.priority;
   };
