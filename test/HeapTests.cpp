@@ -103,7 +103,7 @@ TEST(HeapTests, GetLevels) {
   EXPECT_EQ(levels[1][0], elements[1]);
   EXPECT_EQ(levels[1][1], elements[2]);
 
-  EXPECT_EQ(levels[2].size(), 2);
+  EXPECT_EQ(levels[2].size(), 4);
   EXPECT_EQ(levels[2][0], elements[3]);
   EXPECT_EQ(levels[2][1], elements[0]);
 }

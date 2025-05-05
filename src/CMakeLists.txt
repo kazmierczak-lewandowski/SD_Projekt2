@@ -1,6 +1,3 @@
-find_package(Curses REQUIRED)
-include_directories(${CURSES_INCLUDE_DIR})
-
 add_library(StructuresLib STATIC
         Heap.cpp
         Heap.hpp

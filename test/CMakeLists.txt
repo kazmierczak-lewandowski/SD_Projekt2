@@ -11,6 +11,7 @@ target_link_libraries(Tests
         StructuresLib
         GTest::gtest
         GTest::gtest_main
+        ${CURSES_LIBRARIES}
 )
 
 add_test(

@@ -6,8 +6,12 @@
 
 bool isCorrect(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
-  if (node->left && node->left->element > node->element) return false;
-  if (node->right && node->right->element < node->element) return false;
+  if (node->left) {
+    if (node->left->element > node->element || node->left->parent != node) return false;
+  }
+  if (node->right) {
+    if (node->right->element < node->element || node->right->parent != node) return false;
+  }
   return isCorrect(node->left.get()) && isCorrect(node->right.get());
 }
 
@@ -114,9 +118,9 @@ TEST(AVLTreeTests, getLevels) {
     {{-1,-1}, {1,6}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}}
   };
 
-  EXPECT_EQ(levels.size(), expectedLevels.size());
+  ASSERT_EQ(levels.size(), expectedLevels.size());
   for (size_t i = 0; i < levels.size(); ++i) {
-    EXPECT_EQ(levels[i].size(), expectedLevels[i].size());
+    ASSERT_EQ(levels[i].size(), expectedLevels[i].size());
     for (size_t j = 0; j < levels[i].size(); ++j) {
       EXPECT_EQ(levels[i][j], expectedLevels[i][j]);
     }
@@ -167,6 +171,37 @@ TEST(AVLTreeTests, modifyKey) {
   avl.insert(Element{1, 9});
   avl.insert(Element{1, 7});
   avl.modifyKey(Element(1,10),13);
+  EXPECT_TRUE(isCorrect(avl.getRoot()));
+  EXPECT_TRUE(isBalanced(avl.getRoot()));
+}
+TEST(AVLTreeTests, randomTree) {
+  AVLTree avl;
+  for (int i = 0; i < 100'000; ++i) {
+    const int key = Utils::rng(0, 5'000'000);
+    const int value = Utils::rng(0, 5'000'000);
+    avl.insert(Element{key, value});
+  }
+  ASSERT_EQ(avl.getSize(), 100'000);
+  ASSERT_TRUE(isCorrect(avl.getRoot()));
+  ASSERT_TRUE(isBalanced(avl.getRoot()));
+  const auto element = avl.getRandomElement();
+  const auto foundElement = avl.findElement(element);
+  ASSERT_TRUE(foundElement != nullptr);
+  EXPECT_NE(foundElement->element, Element(-1, -1));
+  EXPECT_TRUE(isCorrect(avl.getRoot()));
+  EXPECT_TRUE(isBalanced(avl.getRoot()));
+}
+TEST(AVLTreeTests, treeFromFile) {
+  AVLTree avl;
+  AVLTree::fillFromFile(avl, "/home/kazik/CLionProjects/SD_Projekt2/src/numbers.txt",
+                   100'000);
+  ASSERT_EQ(avl.getSize(), 100'000);
+  ASSERT_TRUE(isCorrect(avl.getRoot()));
+  ASSERT_TRUE(isBalanced(avl.getRoot()));
+  const auto element = avl.getRandomElement();
+  const auto foundElement = avl.findElement(element);
+  ASSERT_TRUE(foundElement != nullptr);
+  EXPECT_NE(foundElement->element, Element(-1, -1));
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }

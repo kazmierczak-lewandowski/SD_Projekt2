@@ -3,7 +3,6 @@
 #include "Element.hpp"
 #include "Utils.hpp"
 
-#include <bits/ranges_algo.h>
 #include <cmath>
 #include <fstream>
 #include <iostream>

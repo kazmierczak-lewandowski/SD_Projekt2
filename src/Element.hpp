@@ -1,6 +1,6 @@
 #ifndef ELEMENT_HPP
 #define ELEMENT_HPP
-#include <compare>
+#include <format>
 #include <ostream>
 
 class Element {

@@ -66,7 +66,8 @@ void Collection::fillFromFile(Collection &collection,
     if (i >= size) {
       break;
     }
-    collection.insert(Element(number, priority));
+    const auto element = Element(number, priority);
+    collection.insert(element);
     i++;
   }
   ifs.close();
