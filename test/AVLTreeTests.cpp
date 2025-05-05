@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
+
 bool isCorrect(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
   if (node->left && node->left->element > node->element) return false;
@@ -134,9 +135,9 @@ TEST(AVLTreeTests, extractMax) {
   avl.insert(Element{1, 6});
   avl.insert(Element{1, 7});
   avl.insert(Element{1, 8});
-  // avl.insert(Element{1, 4});
-  // avl.insert(Element{1, 5});
-  // avl.insert(Element{1, 6});
+  avl.insert(Element{1, 4});
+  avl.insert(Element{1, 5});
+  avl.insert(Element{1, 6});
   avl.extractMax();
   avl.extractMax();
   avl.extractMax();
@@ -151,8 +152,10 @@ TEST(AVLTreeTests, deleting) {
   avl.insert(Element{1, 12});
   avl.insert(Element{1, 9});
   avl.insert(Element{1, 7});
-  avl.deleteNodeByElement(Element(1,8));
-  avl.deleteNodeByElement(Element(1,10));
+  avl.insert(Element{1, 6});
+  avl.deleteNodeByElement(Element(1,7));
+  avl.deleteNodeByElement(Element(1,9));
+
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }

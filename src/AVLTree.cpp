@@ -30,9 +30,9 @@ void AVLTree::insert(Element element) {
   setSize(getSize() + 1);
   updateBalanceUp(parent);
 }
-void AVLTree::modifyKey(const Element& element, int newPriority) {
+void AVLTree::modifyKey(const Element& element, const int newPriority) {
   auto node = findElement(element);
-  int value = node->element.getValue();
+  const int value = node->element.getValue();
   deleteNode(node);
   insert(Element(value, newPriority));
 }
