@@ -92,7 +92,7 @@ int main() {
     menuLoop(CHOICES, highlight);
     switch (highlight) {
     case 0: {
-      Collection::fillFromFile(*collection, "numbers.txt");
+      Collection::fillFromFile(*collection, "numbers.txt", getInput("Podaj rozmiar: "));
       clear();
       printw("Wypelniono danymi z pliku\n");
       getch();

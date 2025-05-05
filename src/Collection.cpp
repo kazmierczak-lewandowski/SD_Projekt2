@@ -54,20 +54,25 @@ void Collection::fillWithRandom(Collection &collection, const int size) {
   }
 }
 void Collection::fillFromFile(Collection &collection,
-                              const std::string &filename) {
+                              const std::string &filename, const int size) {
   std::ifstream ifs(filename);
   if (!ifs.is_open()) {
     std::cerr << "Failed to open file " << filename << std::endl;
   }
   int number;
   int priority;
+  int i = 0;
   while (ifs >> number && ifs >> priority) {
+    if (i >= size) {
+      break;
+    }
     collection.insert(Element(number, priority));
+    i++;
   }
   ifs.close();
 }
 Element Collection::getRandomElement() const {
-  auto levels = getLevels();
+  const auto levels = getLevels();
   std::vector<Element> allElements;
   for (const auto &level : levels) {
     for (Element element : level) {

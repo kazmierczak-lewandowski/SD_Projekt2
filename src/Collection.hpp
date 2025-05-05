@@ -23,9 +23,10 @@ public:
     return !isEmpty() ? static_cast<int>(std::log2(getSize())) : 0;
   }
   [[nodiscard]] int getSize() const { return size; }
-  static void fillWithRandom(Collection &collection, const int size);
-  static void fillFromFile(Collection &collection, const std::string &filename);
-  Element getRandomElement() const;
+  static void fillWithRandom(Collection &collection, int size);
+  static void fillFromFile(Collection &collection, const std::string &filename,
+                           int size);
+  [[nodiscard]] Element getRandomElement() const;
   [[nodiscard]] bool isEmpty() const { return size == 0; }
 
 protected:
