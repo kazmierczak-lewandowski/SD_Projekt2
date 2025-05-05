@@ -112,19 +112,23 @@ void AVLTree::getLevels(const AVLNode* current, // NOLINT(*-no-recursion)
 void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return;
 
+  AVLNode* parent = nullptr;
+
   if (node->left == nullptr && node->right == nullptr) {
+    parent = node->parent;
     if (node == root.get()) {
       root.reset();
     } else {
-      if (node->parent->left.get() == node) {
-        node->parent->left.reset();
+      if (parent->left.get() == node) {
+        parent->left.reset();
       } else {
-        node->parent->right.reset();
+        parent->right.reset();
       }
     }
   }
 
   else if (node->left == nullptr || node->right == nullptr) {
+    parent = node->parent;
     std::unique_ptr<AVLNode>& child =
         node->left != nullptr ? node->left : node->right;
     if (node == root.get()) {
@@ -133,10 +137,10 @@ void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
     } else {
       if (node->parent->left.get() == node) {
         child->parent = node->parent;
-        node->parent->left = std::move(child);
+        parent->left = std::move(child);
       } else {
         child->parent = node->parent;
-        node->parent->right = std::move(child);
+        parent->right = std::move(child);
       }
     }
   }
@@ -150,7 +154,7 @@ void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
     deleteNode(successor);
     return;
   }
-  updateBalanceUp(node->parent);
+  updateBalanceUp(parent);
 }
 
 void AVLTree::deleteNodeByElement(const Element& element) {
@@ -225,7 +229,7 @@ void AVLTree::balance(AVLNode* node) {
 
   updateHeight(node);
 
-  int balance_factor = checkBalance(node);
+  const int balance_factor = checkBalance(node);
 
   if (balance_factor > 1) {
     if (checkBalance(node->left.get()) >= 0) {
