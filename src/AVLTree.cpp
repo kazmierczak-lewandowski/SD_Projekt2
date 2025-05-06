@@ -111,7 +111,6 @@ std::vector<std::vector<Element>> AVLTree::getLevels() const {
 }
 
 void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
-  setSize(getSize()-1);
   if (node == nullptr) return;
 
   AVLNode* parent = nullptr;
@@ -179,6 +178,8 @@ AVLTree::AVLNode* AVLTree::findElement(const Element& element) const {
 void AVLTree::RRRotation(std::unique_ptr<AVLNode>& current) {
   std::unique_ptr<AVLNode> currentRight = std::move(current->right);
   const auto parent = current->parent;
+  Element parentLeft;
+  if (parent != nullptr) {parentLeft = parent->left->element;}
   current->right = move(currentRight->left);
   if (current->right != nullptr) {
     current->right->parent = current.get();
@@ -192,7 +193,7 @@ void AVLTree::RRRotation(std::unique_ptr<AVLNode>& current) {
     root = std::move(currentRight);
     updateHeight(root.get());
   } else {
-    if (parent->left.get() == original) {
+    if (parentLeft == original->element) {
       parent->left = std::move(currentRight);
       updateHeight(parent->left.get());
     } else {
@@ -204,6 +205,8 @@ void AVLTree::RRRotation(std::unique_ptr<AVLNode>& current) {
 void AVLTree::LLRotation(std::unique_ptr<AVLNode>& current) {
   std::unique_ptr<AVLNode> currentLeft = std::move(current->left);
   const auto parent = current->parent;
+  Element parentLeft;
+  if (parent != nullptr) {parentLeft = parent->left->element;}
   current->left = move(currentLeft->right);
   if (current->left != nullptr) {
     current->left->parent = current.get();
@@ -217,7 +220,7 @@ void AVLTree::LLRotation(std::unique_ptr<AVLNode>& current) {
     root = std::move(currentLeft);
     updateHeight(root.get());
   } else {
-    if (parent->left.get() == original) {
+    if (parentLeft == original->element) {
       parent->left = std::move(currentLeft);
       updateHeight(parent->left.get());
     } else {
