@@ -68,6 +68,27 @@ Element AVLTree::extractMax() {
   return extractMaxFromSubtree(current);
 }
 
+void AVLTree::getLevelsInsider(std::queue<const AVLTree::AVLNode *> q,
+                               const int levelSize,
+                               std::vector<Element> currentLevel,
+                               bool &hasValidNode) {
+  for (int i = 0; i < levelSize; ++i) {
+    const AVLNode *node = q.front();
+    q.pop();
+
+    if (node) {
+      currentLevel.push_back(node->element);
+      q.push(node->left.get());
+      q.push(node->right.get());
+      if (node->left || node->right)
+        hasValidNode = true;
+    } else {
+      currentLevel.emplace_back(-1, -1);
+      q.push(nullptr);
+      q.push(nullptr);
+    }
+  }
+}
 std::vector<std::vector<Element>> AVLTree::getLevels() const {
   std::vector<std::vector<Element>> levels;
   if (!root) return levels;
@@ -76,33 +97,18 @@ std::vector<std::vector<Element>> AVLTree::getLevels() const {
   q.push(root.get());
 
   while (!q.empty()) {
-    auto levelSize = static_cast<int>(q.size());
+    const auto levelSize = static_cast<int>(q.size());
     std::vector<Element> currentLevel;
     bool hasValidNode = false;
 
-    for (int i = 0; i < levelSize; ++i) {
-      const AVLNode* node = q.front();
-      q.pop();
-
-      if (node) {
-        currentLevel.push_back(node->element);
-        q.push(node->left.get());
-        q.push(node->right.get());
-        if (node->left || node->right) hasValidNode = true;
-      } else {
-        currentLevel.emplace_back(-1, -1);
-        q.push(nullptr); // Placeholders for children
-        q.push(nullptr);
-      }
-    }
+    getLevelsInsider(q, levelSize, currentLevel, hasValidNode);
 
     levels.push_back(currentLevel);
-    if (!hasValidNode) break; // Stop if no more nodes
+    if (!hasValidNode) break;
   }
 
-  // Remove trailing all-placeholder levels
   while (!levels.empty() &&
-         std::all_of(levels.back().begin(), levels.back().end(),
+         std::ranges::all_of(levels.back(),
              [](const Element& e) { return e == Element(-1, -1); })) {
     levels.pop_back();
              }

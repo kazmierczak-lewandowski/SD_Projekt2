@@ -10,7 +10,8 @@
 void Analysis::printSubTest(const int size, const int iteration) {
   move(1, 0);
   clrtoeol();
-  mvprintw(1, 0, "%s", std::format("{} test for {}\n", iteration, size).c_str());
+  mvprintw(1, 0, "%s",
+           std::format("{} test for {}\n", iteration, size).c_str());
   refresh();
 }
 Element Analysis::prepareToTest(const CollectionType type, const int size,
@@ -20,7 +21,8 @@ Element Analysis::prepareToTest(const CollectionType type, const int size,
   type == CollectionType::HEAP ? collection = std::make_unique<Heap>(size + 1)
                                : collection = std::make_unique<AVLTree>();
   Collection::fillFromFile(
-      *collection, "/home/kazik/CLionProjects/SD_Projekt2/src/numbers.txt", size);
+      *collection, "/home/kazik/CLionProjects/SD_Projekt2/src/numbers.txt",
+      size);
   return {Utils::rng(0, 5'000'000), Utils::rng(0, 25'000'000)};
 }
 std::map<int, long> Analysis::analyzeInsert(const CollectionType type) {
@@ -30,7 +32,7 @@ std::map<int, long> Analysis::analyzeInsert(const CollectionType type) {
       std::format("Analyzing Insertion of {}",
                   type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000'000) {
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -52,7 +54,7 @@ std::map<int, long> Analysis::analyzePeek(const CollectionType type) {
   const auto string = std::format(
       "Analyzing peek of {}", type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000'000) {
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -71,10 +73,11 @@ std::map<int, long> Analysis::analyzePeek(const CollectionType type) {
 std::map<int, long> Analysis::analyzeExtractMax(const CollectionType type) {
   clear();
   std::map<int, long> result;
-  const auto string = std::format(
-      "Analyzing extract max of {}", type == CollectionType::HEAP ? "Heap" : "BST");
+  const auto string =
+      std::format("Analyzing extract max of {}",
+                  type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000'000) {
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -97,7 +100,7 @@ std::map<int, long> Analysis::analyzeHeight(const CollectionType type) {
       std::format("Analyzing getting height of {}",
                   type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100'000; i <= 5'000'000; i += 100'000'000) {
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -120,7 +123,7 @@ std::map<int, long> Analysis::analyzeModifyKey(const CollectionType type) {
       std::format("Analyzing modifying key of {}",
                   type == CollectionType::HEAP ? "Heap" : "BST");
   mvprintw(0, 0, "%s", string.c_str());
-  for (int i = 100; i <= 5'000'000; i += 100'000'000) {
+  for (int i = 100'000; i <= 5'000'000; i += 100'000) {
     long average = 0;
     for (int j = 0; j < ITERATIONS; j++) {
       std::unique_ptr<Collection> collection;
@@ -150,24 +153,24 @@ void Analysis::writeToFile(const std::string &filename,
 void Analysis::analyze() {
   using enum CollectionType;
   std::map<int, long> data;
-  data = analyzeInsert(BST);
-  writeToFile("InsertionBST.csv", data);
-  data = analyzePeek(BST);
-  writeToFile("PeekBST.csv", data);
-  data = analyzeExtractMax(BST);
-  writeToFile("HeightBST.csv", data);
-  data = analyzeModifyKey(BST);
-  writeToFile("ExtractMaxBST.csv", data);
-  data = analyzeHeight(BST);
-  writeToFile("ModifyKeyBST.csv", data);
-  data = analyzeInsert(HEAP);
-  writeToFile("InsertionHeap.csv", data);
-  data = analyzePeek(HEAP);
-  writeToFile("PeekHeap.csv", data);
-  data = analyzeHeight(HEAP);
-  writeToFile("HeightHeap.csv", data);
+  // data = analyzeInsert(BST);
+  // writeToFile("InsertionBST.csv", data);
+  // data = analyzePeek(BST);
+  // writeToFile("PeekBST.csv", data);
+  // data = analyzeExtractMax(BST);
+  // writeToFile("HeightBST.csv", data);
+  // data = analyzeModifyKey(BST);
+  // writeToFile("ExtractMaxBST.csv", data);
+  // data = analyzeHeight(BST);
+  // writeToFile("ModifyKeyBST.csv", data);
+  // data = analyzeInsert(HEAP);
+  // writeToFile("InsertionHeap.csv", data);
+  // data = analyzePeek(HEAP);
+  // writeToFile("PeekHeap.csv", data);
+  // data = analyzeHeight(HEAP);
+  // writeToFile("HeightHeap.csv", data);
   data = analyzeExtractMax(HEAP);
   writeToFile("ExtractMaxHeap.csv", data);
-  data = analyzeModifyKey(HEAP);
-  writeToFile("ModifyKeyHeap.csv", data);
+  // data = analyzeModifyKey(HEAP);
+  // writeToFile("ModifyKeyHeap.csv", data);
 }
