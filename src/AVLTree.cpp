@@ -72,7 +72,7 @@ Element AVLTree::extractMax() {
 
 void AVLTree::getLevelsInsider(std::queue<const AVLNode*>& q,
                                const int levelSize,
-                               std::vector<Element> currentLevel,
+                               std::vector<Element>& currentLevel,
                                bool &hasValidNode) {
   for (int i = 0; i < levelSize; ++i) {
     const AVLNode *node = q.front();
@@ -185,9 +185,15 @@ AVLTree::AVLNode *AVLTree::findElement(const Element &element) const {
 void AVLTree::RRRotation(std::unique_ptr<AVLNode> &current) {
   std::unique_ptr<AVLNode> currentRight = std::move(current->right);
   const auto parent = current->parent;
-  Element parentLeft;
+  const AVLNode *parentLeft = nullptr;
+  const AVLNode *parentRight = nullptr;
   if (parent != nullptr) {
-    parentLeft = parent->left->element;
+    if (parent->left != nullptr){
+      parentLeft = parent->left.get();
+    }
+    if (parent->right != nullptr){
+      parentRight = parent->right.get();
+    }
   }
   current->right = move(currentRight->left);
   if (current->right != nullptr) {
@@ -202,21 +208,30 @@ void AVLTree::RRRotation(std::unique_ptr<AVLNode> &current) {
     root = std::move(currentRight);
     updateHeight(root.get());
   } else {
-    if (parentLeft == original->element) {
+    if (parentLeft == original) {
       parent->left = std::move(currentRight);
       updateHeight(parent->left.get());
-    } else {
+    } else if (parentRight == original) {
       parent->right = std::move(currentRight);
       updateHeight(parent->right.get());
+    }
+    else {
+      throw std::runtime_error("Parent is not correct");
     }
   }
 }
 void AVLTree::LLRotation(std::unique_ptr<AVLNode> &current) {
   std::unique_ptr<AVLNode> currentLeft = std::move(current->left);
   const auto parent = current->parent;
-  Element parentLeft;
+  const AVLNode *parentLeft = nullptr;
+  const AVLNode *parentRight = nullptr;
   if (parent != nullptr) {
-    parentLeft = parent->left->element;
+    if (parent->left != nullptr){
+      parentLeft = parent->left.get();
+    }
+    if (parent->right != nullptr){
+      parentRight = parent->right.get();
+    }
   }
   current->left = move(currentLeft->right);
   if (current->left != nullptr) {
@@ -231,12 +246,15 @@ void AVLTree::LLRotation(std::unique_ptr<AVLNode> &current) {
     root = std::move(currentLeft);
     updateHeight(root.get());
   } else {
-    if (parentLeft == original->element) {
+    if (parentLeft == original) {
       parent->left = std::move(currentLeft);
       updateHeight(parent->left.get());
-    } else {
+    } else if (parentRight == original) {
       parent->right = std::move(currentLeft);
       updateHeight(parent->right.get());
+    }
+    else {
+      throw std::runtime_error("Parent is not correct");
     }
   }
 }
@@ -259,9 +277,8 @@ void AVLTree::balance(std::unique_ptr<AVLNode> &current) {
 
   updateHeight(current.get());
 
-  const int balance_factor = checkBalance(current.get());
-
-  if (balance_factor > 1) {
+  if (const int balance_factor = checkBalance(current.get());
+      balance_factor > 1) {
     if (checkBalance(current->left.get()) >= 0) {
       LLRotation(current);
     } else {
@@ -281,20 +298,20 @@ void AVLTree::updateHeight(AVLNode *node) {
   const int rightHeight = node->right ? node->right->height : -1;
   node->height = 1 + std::max(leftHeight, rightHeight);
 }
-void AVLTree::updateBalanceUp(AVLNode *current) {
-  while (current != nullptr) {
-    updateHeight(current);
-    if (std::abs(checkBalance(current)) > 1) {
-      if (current == root.get()) {
+void AVLTree::updateBalanceUp(AVLNode *node) {
+  while (node != nullptr) {
+    updateHeight(node);
+    if (std::abs(checkBalance(node)) > 1) {
+      if (node == root.get()) {
         balance(root);
         continue;
       }
-      if (current->parent->left.get() == current) {
-        balance(current->parent->left);
+      if (node->parent->left.get() == node) {
+        balance(node->parent->left);
       } else {
-        balance(current->parent->right);
+        balance(node->parent->right);
       }
     }
-    current = current->parent;
+    node = node->parent;
   }
 }

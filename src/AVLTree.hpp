@@ -23,7 +23,7 @@ public:
   void insert(Element element) override;
   Element extractMax() override;
   static void getLevelsInsider(std::queue<const AVLNode *> &q, int levelSize,
-                               std::vector<Element> currentLevel,
+                               std::vector<Element> &currentLevel,
                                bool &hasValidNode);
   [[nodiscard]] Element peek() const override;
   [[nodiscard]] AVLNode* findElement(const Element &element) const;

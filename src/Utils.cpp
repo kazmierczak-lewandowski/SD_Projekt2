@@ -2,19 +2,21 @@
 #include <algorithm>
 
 int Utils::rng(const int min, const int max) {
-  auto gen = getRandomGenerator();
-  std::uniform_int_distribution dis(min, max);
-  return dis(gen);
+  static std::uniform_int_distribution<int> dist;
+  auto& gen = get_generator();
+  return dist(gen, std::uniform_int_distribution<>::param_type(min, max));
 }
+
 int Utils::gauss(const int min, const int max) {
   const double mean = (min + max) / 2.0;
   const double stddev = (max - min) / 6.0;
+  static std::normal_distribution dist;
+  auto& gen = get_generator();
 
-  auto gen = getRandomGenerator();
-  std::normal_distribution dist(mean, stddev);
-  double number = -1;
+  double number;
   do {
-    number = dist(gen);
+    number = dist(gen, std::normal_distribution<>::param_type(mean, stddev));
   } while (number < min || number > max);
-  return static_cast<int>(number);
+
+  return static_cast<int>(std::round(number));
 }
