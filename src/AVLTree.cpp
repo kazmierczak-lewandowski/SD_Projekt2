@@ -45,21 +45,21 @@ Element AVLTree::peek() const {
   }
   return current->element;
 }
-Element AVLTree::extractMaxFromSubtree(AVLNode *current) {
-  while (current->right != nullptr) {
-    current = current->right.get();
+Element AVLTree::extractMaxFromSubtree(AVLNode *node) {
+  while (node->right != nullptr) {
+    node = node->right.get();
   }
-  if (current == root.get()) {
-    root = std::move(current->left);
+  if (node == root.get()) {
+    root = std::move(node->left);
     root->parent = nullptr;
     updateBalanceUp(root.get());
-    return current->element;
+    return node->element;
   }
-  auto parent = current->parent;
-  const Element currentElement = current->element;
-  if (current->left)
-    current->left->parent = current->parent;
-  current->parent->right = std::move(current->left);
+  const auto parent = node->parent;
+  const Element currentElement = node->element;
+  if (node->left)
+    node->left->parent = node->parent;
+  node->parent->right = std::move(node->left);
   if (parent != nullptr)
     updateBalanceUp(parent);
   return currentElement;

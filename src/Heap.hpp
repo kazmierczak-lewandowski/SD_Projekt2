@@ -34,6 +34,9 @@ public:
   [[nodiscard]] Element peek() const override;
   [[nodiscard]] int findElement(const Element &element) const;
   void modifyKey(const Element &element, int newPriority) override;
+  [[nodiscard]] int getHeight() const override {
+    return !isEmpty() ? static_cast<int>(std::log2(getSize())) : 0;
+  }
 
 private:
   std::unique_ptr<Element[]> elements;
@@ -45,6 +48,7 @@ private:
   [[nodiscard]] static int parent(int index);
   void ensureCapacity();
   void grow();
+
 };
 
 #endif // HEAP_HPP

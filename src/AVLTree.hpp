@@ -32,6 +32,9 @@ public:
     return root.get();
   }
   void deleteNodeByElement(const Element &element);
+  [[nodiscard]] int getHeight() const override {
+    return getLevels().size() - 1;
+  }
 private:
   std::unique_ptr<AVLNode> root = nullptr;
   void LLRotation(std::unique_ptr<AVLNode> &current);
@@ -42,9 +45,9 @@ private:
   void balance(std::unique_ptr<AVLNode> &current);
   static void updateHeight(AVLNode *node);
   void updateBalanceUp(AVLNode *node);
-  static void getLevels(const AVLNode *current, std::vector<std::vector<Element>> &elements);
   void deleteNode(AVLNode *node);
   Element extractMaxFromSubtree(AVLNode *node);
+
 };
 
 #endif // AVLTree_HPP

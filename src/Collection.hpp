@@ -18,9 +18,7 @@ public:
   [[nodiscard]] virtual Element peek() const = 0;
   virtual void modifyKey(const Element &element, int newPriority) = 0;
   virtual void print() const;
-  [[nodiscard]] virtual int getHeight() const {
-    return !isEmpty() ? static_cast<int>(std::log2(getSize())) : 0;
-  }
+  [[nodiscard]] virtual int getHeight() const = 0;
   [[nodiscard]] int getSize() const { return size; }
   static void fillWithRandom(Collection &collection, int size);
   static void fillFromFile(Collection &collection, const std::string &filename,

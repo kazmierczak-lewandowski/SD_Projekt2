@@ -158,11 +158,11 @@ void Analysis::analyze() {
   // data = analyzePeek(BST);
   // writeToFile("PeekBST.csv", data);
   // data = analyzeExtractMax(BST);
-  // writeToFile("HeightBST.csv", data);
-  // data = analyzeModifyKey(BST);
   // writeToFile("ExtractMaxBST.csv", data);
-  // data = analyzeHeight(BST);
-  // writeToFile("ModifyKeyBST.csv", data);
+  data = analyzeHeight(BST);
+  writeToFile("HeightBST.csv", data);
+  data = analyzeModifyKey(BST);
+  writeToFile("ModifyKeyBST.csv", data);
   // data = analyzeInsert(HEAP);
   // writeToFile("InsertionHeap.csv", data);
   // data = analyzePeek(HEAP);
