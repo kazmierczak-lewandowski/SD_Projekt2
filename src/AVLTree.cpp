@@ -33,9 +33,13 @@ void AVLTree::insert(Element element) {
 }
 void AVLTree::modifyKey(const Element &element, const int newPriority) {
   const auto node = findElement(element);
+  if (node == nullptr) {
+    return;
+  }
   const int value = node->element.getValue();
+  auto newElement = Element(value, newPriority);
   deleteNode(node);
-  insert(Element(value, newPriority));
+  insert(newElement);
 }
 
 Element AVLTree::peek() const {
@@ -173,7 +177,7 @@ void AVLTree::deleteNodeByElement(const Element &element) {
 
 AVLTree::AVLNode *AVLTree::findElement(const Element &element) const {
   AVLNode *current = root.get();
-  while (current->element != element) {
+  while (current != nullptr && current->element != element) {
     if (element < current->element) {
       current = current->left.get();
       continue;

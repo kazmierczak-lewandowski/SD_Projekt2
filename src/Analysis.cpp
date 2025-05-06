@@ -21,7 +21,7 @@ Element Analysis::prepareToTest(const CollectionType type, const int size,
   type == CollectionType::HEAP ? collection = std::make_unique<Heap>(size + 1)
                                : collection = std::make_unique<AVLTree>();
   Collection::fillFromFile(
-      *collection, "/home/kazik/CLionProjects/SD_Projekt2/src/numbers.txt",
+      *collection, "/home/piotr/CLionProjects/SD_Projekt2/numbers.txt",
       size);
   return {Utils::rng(0, 5'000'000), Utils::rng(0, 25'000'000)};
 }
@@ -142,7 +142,7 @@ std::map<int, long> Analysis::analyzeModifyKey(const CollectionType type) {
 }
 void Analysis::writeToFile(const std::string &filename,
                            const std::map<int, long> &data) {
-  std::ofstream ofs("/home/kazik/CLionProjects/SD_Projekt2/results/" +
+  std::ofstream ofs("/home/piotr/CLionProjects/SD_Projekt2/results" +
                     filename);
   ofs << "size;time" << std::endl;
   for (const auto &[key, value] : data) {
@@ -159,8 +159,8 @@ void Analysis::analyze() {
   // writeToFile("PeekBST.csv", data);
   // data = analyzeExtractMax(BST);
   // writeToFile("ExtractMaxBST.csv", data);
-  data = analyzeHeight(BST);
-  writeToFile("HeightBST.csv", data);
+  // data = analyzeHeight(BST);
+  // writeToFile("HeightBST.csv", data);
   data = analyzeModifyKey(BST);
   writeToFile("ModifyKeyBST.csv", data);
   // data = analyzeInsert(HEAP);
@@ -169,8 +169,8 @@ void Analysis::analyze() {
   // writeToFile("PeekHeap.csv", data);
   // data = analyzeHeight(HEAP);
   // writeToFile("HeightHeap.csv", data);
-  data = analyzeExtractMax(HEAP);
-  writeToFile("ExtractMaxHeap.csv", data);
-  // data = analyzeModifyKey(HEAP);
-  // writeToFile("ModifyKeyHeap.csv", data);
+  // data = analyzeExtractMax(HEAP);
+  // writeToFile("ExtractMaxHeap.csv", data);
+  data = analyzeModifyKey(HEAP);
+  writeToFile("ModifyKeyHeap.csv", data);
 }
