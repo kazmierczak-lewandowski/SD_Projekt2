@@ -34,12 +34,12 @@ public:
   void deleteNodeByElement(const Element &element);
 private:
   std::unique_ptr<AVLNode> root = nullptr;
-  void LLRotation(AVLNode *current);
-  void RRRotation(AVLNode *current);
-  void LRRotation(AVLNode *current);
-  void RLRotation(AVLNode *current);
+  void LLRotation(std::unique_ptr<AVLNode> &current);
+  void RRRotation(std::unique_ptr<AVLNode> &current);
+  void LRRotation(std::unique_ptr<AVLNode> &current);
+  void RLRotation(std::unique_ptr<AVLNode> &current);
   static int checkBalance(const AVLNode *current);
-  void balance(AVLNode *current);
+  void balance(std::unique_ptr<AVLNode> &current);
   static void updateHeight(AVLNode *node);
   void updateBalanceUp(AVLNode *node);
   static void getLevels(const AVLNode *current, std::vector<std::vector<Element>> &elements);
