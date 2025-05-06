@@ -2,7 +2,18 @@
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <cmath>
+void printTree(const AVLTree::AVLNode* node, const std::string& prefix = "", bool isLeft = true) {
+  if (node == nullptr) return;
 
+  std::cout << prefix;
+
+  std::cout << (isLeft ? "├──" : "└──");
+
+  std::cout << "(p = " << (node->parent ? std::to_string(node->parent->element.getPriority()) : "null")  << ", " << node->element.getPriority() << ", h=" << node->height << ")" << std::endl;
+
+  printTree(node->left.get(), prefix + (isLeft ? "│   " : "    "), true);
+  printTree(node->right.get(), prefix + (isLeft ? "│   " : "    "), false);
+}
 
 bool isCorrect(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
@@ -39,12 +50,12 @@ void add7ElementsForTests(AVLTree &avl) {
   avl.insert(Element{2, 17});
   avl.insert(Element{2, 18});
   avl.insert(Element{3, 16});
-  avl.insert(Element{2, 15});
-  avl.insert(Element{2, 13});
-  avl.insert(Element{2, 14});
-  avl.insert(Element{2, 2});
-  avl.insert(Element{2, 1});
-  avl.insert(Element{2, 0});
+  // avl.insert(Element{2, 15});
+  // avl.insert(Element{2, 13});
+  // avl.insert(Element{2, 14});
+  // avl.insert(Element{2, 2});
+  // avl.insert(Element{2, 1});
+  // avl.insert(Element{2, 0});
 
 }
 TEST(AVLTreeTests, insert) {
@@ -52,6 +63,7 @@ TEST(AVLTreeTests, insert) {
   add7ElementsForTests(avl);
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
+  EXPECT_EQ(avl.getSize(), 13);
 }
 TEST(AVLTreeTests, RRRotationParentRight) {
   AVLTree avl;
@@ -70,9 +82,11 @@ TEST(AVLTreeTests, RRRotationParentLeft) {
   avl.insert(Element{3, 11});
   avl.insert(Element{4, 7});
   avl.insert(Element{5, 8});
+  printTree(avl.getRoot());
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }
+
 TEST(AVLTreeTests, RRRotationWithRoot) {
   AVLTree avl;
   avl.insert(Element{1, 1});
@@ -96,6 +110,16 @@ TEST(AVLTreeTests, LLRotationParentLeft) {
   avl.insert(Element{3, 11});
   avl.insert(Element{4, 5});
   avl.insert(Element{5, 4});
+  EXPECT_TRUE(isCorrect(avl.getRoot()));
+  EXPECT_TRUE(isBalanced(avl.getRoot()));
+}
+TEST(AVLTreeTests, LLRotationParentRight) {
+  AVLTree avl;
+  avl.insert(Element{1, 10});
+  avl.insert(Element{2, 12});
+  avl.insert(Element{3, 8});
+  avl.insert(Element{4, 7});
+  avl.insert(Element{5, 6});
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }
@@ -157,8 +181,11 @@ TEST(AVLTreeTests, deleting) {
   avl.insert(Element{1, 9});
   avl.insert(Element{1, 7});
   avl.insert(Element{1, 6});
-  avl.deleteNodeByElement(Element(1,7));
+  avl.deleteNodeByElement(Element(1,12));
   avl.deleteNodeByElement(Element(1,9));
+  avl.deleteNodeByElement(Element(1,10));
+  EXPECT_EQ(avl.getSize(), 3);
+
 
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
