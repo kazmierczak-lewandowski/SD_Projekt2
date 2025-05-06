@@ -1,8 +1,22 @@
 #include "../src/AVLTree.hpp"
-#include <gtest/gtest.h>
+#include "AVLTree.hpp"
 #include <algorithm>
 #include <cmath>
+#include <gtest/gtest.h>
+void printTree(const AVLTree::AVLNode* node, int space) {
+  if (node == nullptr) return;
 
+  // Increase distance between levels
+  constexpr int COUNT = 2;
+  space += COUNT;
+
+  printTree(node->right.get(), space);
+  for (int i = COUNT; i < space; i++) std::cout << " ";
+  std::cout << "(" << node->element.getPriority() << ")" << std::endl;
+
+  // Process left child
+  printTree(node->left.get(), space);
+}
 
 bool isCorrect(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
@@ -34,22 +48,22 @@ void add7ElementsForTests(AVLTree &avl) {
   avl.insert(Element{2, 7});
   avl.insert(Element{3, 6});
   avl.insert(Element{2, 5});
-  avl.insert(Element{2, 4});
-  avl.insert(Element{2, 3});
-  avl.insert(Element{2, 17});
-  avl.insert(Element{2, 18});
-  avl.insert(Element{3, 16});
-  avl.insert(Element{2, 15});
-  avl.insert(Element{2, 13});
-  avl.insert(Element{2, 14});
-  avl.insert(Element{2, 2});
-  avl.insert(Element{2, 1});
-  avl.insert(Element{2, 0});
-
+  // avl.insert(Element{2, 4});
+  // avl.insert(Element{2, 3});
+  // avl.insert(Element{2, 17});
+  // avl.insert(Element{2, 18});
+  // avl.insert(Element{3, 16});
+  // avl.insert(Element{2, 15});
+  // avl.insert(Element{2, 13});
+  // avl.insert(Element{2, 14});
+  // avl.insert(Element{2, 2});
+  // avl.insert(Element{2, 1});
+  // avl.insert(Element{2, 0});
 }
 TEST(AVLTreeTests, insert) {
   AVLTree avl;
   add7ElementsForTests(avl);
+  printTree(avl.getRoot(), 0);
   EXPECT_TRUE(isCorrect(avl.getRoot()));
   EXPECT_TRUE(isBalanced(avl.getRoot()));
 }

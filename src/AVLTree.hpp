@@ -22,9 +22,9 @@ public:
   [[nodiscard]] std::vector<std::vector<Element>> getLevels() const override;
   void insert(Element element) override;
   Element extractMax() override;
-  static void getLevelsInsider(std::queue<const AVLNode *> q, int levelSize,
-                        std::vector<Element> currentLevel,
-                        bool &hasValidNode);
+  static void getLevelsInsider(std::queue<const AVLNode *> &q, int levelSize,
+                               std::vector<Element> currentLevel,
+                               bool &hasValidNode);
   [[nodiscard]] Element peek() const override;
   [[nodiscard]] AVLNode* findElement(const Element &element) const;
   void modifyKey(const Element& element, int newPriority) override;

@@ -68,7 +68,7 @@ Element AVLTree::extractMax() {
   return extractMaxFromSubtree(current);
 }
 
-void AVLTree::getLevelsInsider(std::queue<const AVLTree::AVLNode *> q,
+void AVLTree::getLevelsInsider(std::queue<const AVLNode*>& q,
                                const int levelSize,
                                std::vector<Element> currentLevel,
                                bool &hasValidNode) {
@@ -117,9 +117,12 @@ std::vector<std::vector<Element>> AVLTree::getLevels() const {
 }
 
 void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
-  setSize(getSize()-1);
   if (node == nullptr) return;
-
+  if (node->left == nullptr && node->right == nullptr) {
+    setSize(getSize()-1);
+    updateBalanceUp(node);
+    return;
+  }
   AVLNode* parent = nullptr;
 
   if (node->left == nullptr && node->right == nullptr) {
@@ -172,6 +175,9 @@ void AVLTree::deleteNodeByElement(const Element& element) {
 }
 
 AVLTree::AVLNode* AVLTree::findElement(const Element& element) const {
+  if (root == nullptr) {
+    return nullptr;
+  }
   AVLNode* current = root.get();
   while (current->element != element) {
     if (element < current->element) {
@@ -272,20 +278,20 @@ void AVLTree::updateHeight(AVLNode* node) {
   const int rightHeight = node->right ? node->right->height : -1;
   node->height = 1 + std::max(leftHeight, rightHeight);
 }
-void AVLTree::updateBalanceUp(AVLNode* current) {
-  while (current != nullptr) {
-    updateHeight(current);
-    if (std::abs(checkBalance(current)) > 1) {
-      if (current == root.get()) {
+void AVLTree::updateBalanceUp(AVLNode* node) {
+  while (node != nullptr) {
+    updateHeight(node);
+    if (std::abs(checkBalance(node)) > 1) {
+      if (node == root.get()) {
         balance(root);
         continue;
       }
-      if (current->parent->left.get() == current) {
-        balance(current->parent->left);
+      if (node->parent->left.get() == node) {
+        balance(node->parent->left);
       } else {
-        balance(current->parent->right);
+        balance(node->parent->right);
       }
     }
-    current = current->parent;
+    node = node->parent;
   }
 }
