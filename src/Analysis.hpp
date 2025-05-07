@@ -15,6 +15,9 @@ private:
   static void printSubTest(int size, int iteration);
   static Element prepareToTest(CollectionType type, int size, int iteration,
                                std::unique_ptr<Collection> &collection);
+
+  static void printTestHeader(CollectionType type, std::string title);
+
   static std::map<int, long> analyzeInsert(CollectionType type);
   static std::map<int, long> analyzePeek(CollectionType type);
   static std::map<int, long> analyzeExtractMax(CollectionType type);
