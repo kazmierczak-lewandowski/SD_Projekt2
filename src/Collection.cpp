@@ -1,5 +1,6 @@
 #include "Collection.hpp"
 void Collection::print() const {
+  clear();
   const auto levels = getLevels();
   std::vector<size_t> spaces;
   for (int i = static_cast<int>(levels.size()) - 1; i >= 0; i--) {
