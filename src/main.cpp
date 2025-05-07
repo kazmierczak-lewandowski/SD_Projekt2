@@ -134,6 +134,7 @@ int main() {
     case 6: {
       clear();
       printw("%d", collection->getHeight());
+      break;
     }
     case 7: {
       const Element element(getInput("Podaj warosc elementu do zmiany: "),

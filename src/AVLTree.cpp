@@ -219,9 +219,6 @@ void AVLTree::RRRotation(std::unique_ptr<AVLNode> &current) {
       parent->right = std::move(currentRight);
       updateHeight(parent->right.get());
     }
-    else {
-      throw std::runtime_error("Parent is not correct");
-    }
   }
 }
 void AVLTree::LLRotation(std::unique_ptr<AVLNode> &current) {
@@ -256,9 +253,6 @@ void AVLTree::LLRotation(std::unique_ptr<AVLNode> &current) {
     } else if (parentRight == original) {
       parent->right = std::move(currentLeft);
       updateHeight(parent->right.get());
-    }
-    else {
-      throw std::runtime_error("Parent is not correct");
     }
   }
 }

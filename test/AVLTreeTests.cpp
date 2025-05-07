@@ -5,12 +5,8 @@
 
 bool isCorrect(const AVLTree::AVLNode *node) { // NOLINT(*-no-recursion)
   if (node == nullptr) return true;
-  if (node->left) {
-    if (node->left->element > node->element || node->left->parent != node) return false;
-  }
-  if (node->right) {
-    if (node->right->element < node->element || node->right->parent != node) return false;
-  }
+  if (node->left && (node->left->element > node->element || node->left->parent != node)) return false;
+  if (node->right && (node->right->element < node->element || node->right->parent != node)) return false;
   return isCorrect(node->left.get()) && isCorrect(node->right.get());
 }
 
