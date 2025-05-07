@@ -5,7 +5,7 @@
 
 void AVLTree::insert(Element element) {
   auto newNode = std::make_unique<AVLNode>(element);
-  if (getSize() == 0) {
+  if (isEmpty()) {
     root = std::move(newNode);
     setSize(getSize() + 1);
     return;
