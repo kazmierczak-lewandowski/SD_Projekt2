@@ -9,10 +9,7 @@ public:
   static int gauss(int min, int max);
 
 private:
-  static std::mt19937& get_generator() {
-    static std::mt19937 gen(std::random_device{}());
-    return gen;
-  }
+  static inline std::mt19937 gen{std::random_device{}()};
 };
 
 #endif // UTILS_HPP
