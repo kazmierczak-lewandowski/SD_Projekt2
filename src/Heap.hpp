@@ -10,6 +10,8 @@
 class Heap final : public Collection {
 public:
   explicit Heap() : elements(std::make_unique<Element[]>(10)), capacity(10) {};
+  explicit Heap(const int capacity)
+      : elements(std::make_unique<Element[]>(capacity)), capacity(capacity) {};
   explicit Heap(const std::span<Element> elements)
       : Heap(elements, static_cast<int>(std::size(elements))) {};
   Heap(const std::span<Element> elements, const int capacity)
@@ -30,9 +32,11 @@ public:
   void insert(Element element) override;
   Element extractMax() override;
   [[nodiscard]] Element peek() const override;
-  [[nodiscard]] int findElement(const Element &element,
-                                int index) const;
+  [[nodiscard]] int findElement(const Element &element) const;
   void modifyKey(const Element &element, int newPriority) override;
+  [[nodiscard]] int getHeight() const override {
+    return !isEmpty() ? static_cast<int>(std::log2(getSize())) : 0;
+  }
 
 private:
   std::unique_ptr<Element[]> elements;
@@ -44,6 +48,7 @@ private:
   [[nodiscard]] static int parent(int index);
   void ensureCapacity();
   void grow();
+
 };
 
 #endif // HEAP_HPP

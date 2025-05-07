@@ -1,6 +1,6 @@
 #ifndef ELEMENT_HPP
 #define ELEMENT_HPP
-#include <compare>
+#include <format>
 #include <ostream>
 
 class Element {
@@ -25,6 +25,9 @@ public:
   }
   [[nodiscard]] bool checkValue(const int otherValue) const {
     return value == otherValue;
+  }
+  [[nodiscard]] std::string toString() const {
+    return std::format("({};{})", priority, value);
   }
 
 private:

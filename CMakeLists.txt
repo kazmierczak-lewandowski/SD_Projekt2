@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.30)
 project(SD_Projekt2 LANGUAGES CXX)
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

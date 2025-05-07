@@ -5,6 +5,9 @@ add_library(StructuresLib STATIC
         AVLTree.hpp
         Collection.hpp
         Element.hpp
+        Collection.cpp
+        Utils.cpp
+        Utils.hpp
 )
 target_include_directories(StructuresLib
         PUBLIC
@@ -13,6 +16,8 @@ target_include_directories(StructuresLib
 
 add_executable(Structures
         main.cpp
+        Analysis.cpp
+        Analysis.hpp
 )
 target_include_directories(Structures
         PRIVATE
@@ -21,4 +26,5 @@ target_include_directories(Structures
 target_link_libraries(Structures
         PRIVATE
         StructuresLib
+        ${CURSES_LIBRARIES}
 )

@@ -1,16 +1,17 @@
 #include "AVLTree.hpp"
 
-#include <iostream>
+#include <algorithm>
+#include <queue>
 
 void AVLTree::insert(Element element) {
   auto newNode = std::make_unique<AVLNode>(element);
-  if (getSize() == 0) {
+  if (isEmpty()) {
     root = std::move(newNode);
     setSize(getSize() + 1);
     return;
   }
   auto current = root.get();
-  AVLNode* parent = nullptr;
+  AVLNode *parent = nullptr;
   while (current != nullptr) {
     parent = current;
     if (newNode->element < current->element) {
@@ -30,11 +31,15 @@ void AVLTree::insert(Element element) {
   setSize(getSize() + 1);
   updateBalanceUp(parent);
 }
-void AVLTree::modifyKey(const Element& element, const int newPriority) {
-  auto node = findElement(element);
+void AVLTree::modifyKey(const Element &element, const int newPriority) {
+  const auto node = findElement(element);
+  if (node == nullptr) {
+    return;
+  }
   const int value = node->element.getValue();
+  auto newElement = Element(value, newPriority);
   deleteNode(node);
-  insert(Element(value, newPriority));
+  insert(newElement);
 }
 
 Element AVLTree::peek() const {
@@ -44,127 +49,135 @@ Element AVLTree::peek() const {
   }
   return current->element;
 }
-Element AVLTree::extractMaxFromSubtree(AVLNode* current) {
-  while (current->right != nullptr) {
-    current = current->right.get();
+Element AVLTree::extractMaxFromSubtree(AVLNode *node) {
+  while (node->right != nullptr) {
+    node = node->right.get();
   }
-  if (current == root.get()) {
-    root = std::move(current->left);
+  if (node == root.get()) {
+    root = std::move(node->left);
+    root->parent = nullptr;
     updateBalanceUp(root.get());
-    return current->element;
+    return node->element;
   }
-  auto parent = current->parent;
-  const Element currentElement = current->element;
-  if (current->left) current->left->parent = current->parent;
-  current->parent->right = std::move(current->left);
-  if (parent != nullptr) updateBalanceUp(parent);
+  const auto parent = node->parent;
+  const Element currentElement = node->element;
+  if (node->left)
+    node->left->parent = node->parent;
+  node->parent->right = std::move(node->left);
+  if (parent != nullptr)
+    updateBalanceUp(parent);
   return currentElement;
 }
 
 Element AVLTree::extractMax() {
-  auto current = root.get();
+  const auto current = root.get();
   return extractMaxFromSubtree(current);
 }
 
-std::vector<std::vector<Element>> AVLTree::getLevels() const {
-  if (root == nullptr) return {};
-  std::vector<std::vector<Element>> elements;
-  elements.emplace_back();
-  elements[0].push_back(root->element);
-  getLevels(root.get(), elements);
-  elements.pop_back();
-  for (int i = 0; i < elements[elements.size() - 2].size(); i++) {
-    if (elements[elements.size() - 2][i] == Element(-1, -1)) {
-      elements[elements.size() - 1].insert(
-          elements[elements.size() - 1].begin() + 2 * i, Element(-1, -1));
-      elements[elements.size() - 1].insert(
-          elements[elements.size() - 1].begin() + 2 * i + 1, Element(-1, -1));
+void AVLTree::getLevelsInsider(std::queue<const AVLNode*>& q,
+                               const int levelSize,
+                               std::vector<Element>& currentLevel,
+                               bool &hasValidNode) {
+  for (int i = 0; i < levelSize; ++i) {
+    const AVLNode *node = q.front();
+    q.pop();
+
+    if (node) {
+      currentLevel.push_back(node->element);
+      q.push(node->left.get());
+      q.push(node->right.get());
+      if (node->left || node->right)
+        hasValidNode = true;
+    } else {
+      currentLevel.emplace_back(-1, -1);
+      q.push(nullptr);
+      q.push(nullptr);
     }
   }
-  return elements;
 }
-void AVLTree::getLevels(const AVLNode* current, // NOLINT(*-no-recursion)
-                        std::vector<std::vector<Element>>& elements) {
-  if (current == nullptr) return;
-  int height = 0;
-  auto temp = current->parent;
-  while (temp != nullptr) {
-    height++;
-    temp = temp->parent;
+std::vector<std::vector<Element>> AVLTree::getLevels() const {
+  std::vector<std::vector<Element>> levels;
+  if (!root)
+    return levels;
+
+  std::queue<const AVLNode *> q;
+  q.push(root.get());
+
+  while (!q.empty()) {
+    const auto levelSize = static_cast<int>(q.size());
+    std::vector<Element> currentLevel;
+    bool hasValidNode = false;
+
+    getLevelsInsider(q, levelSize, currentLevel, hasValidNode);
+
+    levels.push_back(currentLevel);
+    if (!hasValidNode)
+      break;
   }
-  if (elements.size() <= height + 1) {
-    elements.emplace_back();
+
+  while (!levels.empty() &&
+         std::ranges::all_of(levels.back(), [](const Element &e) {
+           return e == Element(-1, -1);
+         })) {
+    levels.pop_back();
   }
-  if (current->left == nullptr) {
-    elements[height + 1].emplace_back(-1, -1);
-  } else {
-    elements[height + 1].push_back(current->left->element);
-  }
-  if (current->right == nullptr) {
-    elements[height + 1].emplace_back(-1, -1);
-  } else {
-    elements[height + 1].push_back(current->right->element);
-  }
-  getLevels(current->left.get(), elements);
-  getLevels(current->right.get(), elements);
+
+  return levels;
 }
 
-void AVLTree::deleteNode(AVLNode* node) { // NOLINT(*-no-recursion)
-  if (node == nullptr) return;
+void AVLTree::deleteNode(AVLNode *node) {
+  if (node == nullptr)
+    return;
 
-  AVLNode* parent = nullptr;
+  AVLNode *parent = node->parent;
 
   if (node->left == nullptr && node->right == nullptr) {
-    parent = node->parent;
     if (node == root.get()) {
       root.reset();
     } else {
-      if (parent->left.get() == node) {
+      if (parent->left.get() == node)
         parent->left.reset();
-      } else {
+      else
         parent->right.reset();
-      }
     }
+    setSize(getSize() - 1);
   }
 
   else if (node->left == nullptr || node->right == nullptr) {
-    parent = node->parent;
-    std::unique_ptr<AVLNode>& child =
-        node->left != nullptr ? node->left : node->right;
+    std::unique_ptr<AVLNode> &child = (node->left) ? node->left : node->right;
     if (node == root.get()) {
       root = std::move(child);
       root->parent = nullptr;
     } else {
-      if (node->parent->left.get() == node) {
-        child->parent = node->parent;
+      child->parent = parent;
+      if (parent->left.get() == node)
         parent->left = std::move(child);
-      } else {
-        child->parent = node->parent;
+      else
         parent->right = std::move(child);
-      }
     }
+    setSize(getSize() - 1);
   }
 
   else {
-    AVLNode* successor = node->right.get();
-    while (successor->left) {
+    AVLNode *successor = node->right.get();
+    while (successor->left)
       successor = successor->left.get();
-    }
     node->element = successor->element;
     deleteNode(successor);
     return;
   }
+
   updateBalanceUp(parent);
 }
 
-void AVLTree::deleteNodeByElement(const Element& element) {
+void AVLTree::deleteNodeByElement(const Element &element) {
   const auto node = findElement(element);
   deleteNode(node);
 }
 
-AVLTree::AVLNode* AVLTree::findElement(const Element& element) const {
-  AVLNode* current = root.get();
-  while (current->element != element) {
+AVLTree::AVLNode *AVLTree::findElement(const Element &element) const {
+  AVLNode *current = root.get();
+  while (current != nullptr && current->element != element) {
     if (element < current->element) {
       current = current->left.get();
       continue;
@@ -173,90 +186,130 @@ AVLTree::AVLNode* AVLTree::findElement(const Element& element) const {
   }
   return current;
 }
-void AVLTree::RRRotation(AVLNode* current) {
+void AVLTree::RRRotation(std::unique_ptr<AVLNode> &current) {
   std::unique_ptr<AVLNode> currentRight = std::move(current->right);
-  current->right = std::move(currentRight->left);
-  if (current->right) current->right->parent = current;
-  currentRight->parent = current->parent;
-  if (current->parent) {
-    if (current->parent->right.get() == current) {
-      currentRight->left = std::move(current->parent->right);
-      current->parent->right = std::move(currentRight);
-    } else {
-      currentRight->left = std::move(current->parent->left);
-      current->parent->left = std::move(currentRight);
+  const auto parent = current->parent;
+  const AVLNode *parentLeft = nullptr;
+  const AVLNode *parentRight = nullptr;
+  if (parent != nullptr) {
+    if (parent->left != nullptr){
+      parentLeft = parent->left.get();
     }
-  } else {
-    currentRight->left = std::move(root);
+    if (parent->right != nullptr){
+      parentRight = parent->right.get();
+    }
+  }
+  current->right = move(currentRight->left);
+  if (current->right != nullptr) {
+    current->right->parent = current.get();
+  }
+  currentRight->left = move(current);
+  const auto original = currentRight->left.get();
+  currentRight->parent = parent;
+  original->parent = currentRight.get();
+  updateHeight(original);
+  if (parent == nullptr) {
     root = std::move(currentRight);
-  }
-  updateHeight(current);
-}
-void AVLTree::LLRotation(AVLNode* current) {
-  std::unique_ptr<AVLNode> currentLeft = std::move(current->left);
-  current->left = std::move(currentLeft->right);
-  if (current->left) current->left->parent = current;
-  currentLeft->parent = current->parent;
-  if (current->parent) {
-    if (current->parent->left.get() == current) {
-      currentLeft->right = std::move(current->parent->left);
-      current->parent->left = std::move(currentLeft);
-    } else {
-      currentLeft->right = std::move(current->parent->right);
-      current->parent->right = std::move(currentLeft);
-    }
+    updateHeight(root.get());
   } else {
-    currentLeft->right = std::move(root);
-    root = std::move(currentLeft);
+    if (parentLeft == original) {
+      parent->left = std::move(currentRight);
+      updateHeight(parent->left.get());
+    } else if (parentRight == original) {
+      parent->right = std::move(currentRight);
+      updateHeight(parent->right.get());
+    }
   }
-  updateHeight(current);
 }
-void AVLTree::LRRotation(AVLNode* current) {
-  RRRotation(current->left.get());
+void AVLTree::LLRotation(std::unique_ptr<AVLNode> &current) {
+  std::unique_ptr<AVLNode> currentLeft = std::move(current->left);
+  const auto parent = current->parent;
+  const AVLNode *parentLeft = nullptr;
+  const AVLNode *parentRight = nullptr;
+  if (parent != nullptr) {
+    if (parent->left != nullptr){
+      parentLeft = parent->left.get();
+    }
+    if (parent->right != nullptr){
+      parentRight = parent->right.get();
+    }
+  }
+  current->left = move(currentLeft->right);
+  if (current->left != nullptr) {
+    current->left->parent = current.get();
+  }
+  currentLeft->right = move(current);
+  const auto original = currentLeft->right.get();
+  currentLeft->parent = parent;
+  original->parent = currentLeft.get();
+  updateHeight(original);
+  if (parent == nullptr) {
+    root = std::move(currentLeft);
+    updateHeight(root.get());
+  } else {
+    if (parentLeft == original) {
+      parent->left = std::move(currentLeft);
+      updateHeight(parent->left.get());
+    } else if (parentRight == original) {
+      parent->right = std::move(currentLeft);
+      updateHeight(parent->right.get());
+    }
+  }
+}
+void AVLTree::LRRotation(std::unique_ptr<AVLNode> &current) {
+  RRRotation(current->left);
   LLRotation(current);
 }
-void AVLTree::RLRotation(AVLNode* current) {
-  LLRotation(current->right.get());
+void AVLTree::RLRotation(std::unique_ptr<AVLNode> &current) {
+  LLRotation(current->right);
   RRRotation(current);
 }
-int AVLTree::checkBalance(const AVLNode* current) {
+int AVLTree::checkBalance(const AVLNode *current) {
   const int leftHeight = current->left ? current->left->height : -1;
   const int rightHeight = current->right ? current->right->height : -1;
   return leftHeight - rightHeight;
 }
-void AVLTree::balance(AVLNode* node) {
-  if (!node) return;
+void AVLTree::balance(std::unique_ptr<AVLNode> &current) {
+  if (!current)
+    return;
 
-  updateHeight(node);
+  updateHeight(current.get());
 
-  const int balance_factor = checkBalance(node);
-
-  if (balance_factor > 1) {
-    if (checkBalance(node->left.get()) >= 0) {
-      LLRotation(node);
+  if (const int balance_factor = checkBalance(current.get());
+      balance_factor > 1) {
+    if (checkBalance(current->left.get()) >= 0) {
+      LLRotation(current);
     } else {
-      LRRotation(node);
+      LRRotation(current);
     }
   } else if (balance_factor < -1) {
-    if (checkBalance(node->right.get()) <= 0) {
-      RRRotation(node);
+    if (checkBalance(current->right.get()) <= 0) {
+      RRRotation(current);
     } else {
-      RLRotation(node);
+      RLRotation(current);
     }
   }
 }
 
-void AVLTree::updateHeight(AVLNode* node) {
+void AVLTree::updateHeight(AVLNode *node) {
   const int leftHeight = node->left ? node->left->height : -1;
   const int rightHeight = node->right ? node->right->height : -1;
   node->height = 1 + std::max(leftHeight, rightHeight);
 }
-void AVLTree::updateBalanceUp(AVLNode* current) {
-  while (current != nullptr) {
-    updateHeight(current);
-    if (std::abs(checkBalance(current)) > 1) {
-      balance(current);
+void AVLTree::updateBalanceUp(AVLNode *node) {
+  while (node != nullptr) {
+    updateHeight(node);
+    if (std::abs(checkBalance(node)) > 1) {
+      if (node == root.get()) {
+        balance(root);
+        continue;
+      }
+      if (node->parent->left.get() == node) {
+        balance(node->parent->left);
+      } else {
+        balance(node->parent->right);
+      }
     }
-    current = current->parent;
+    node = node->parent;
   }
 }
